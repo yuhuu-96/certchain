@@ -629,8 +629,8 @@ export default function Home() {
               </div>
               <h2 style={{ fontSize: "20px", fontWeight: 600, marginBottom: "6px" }}>Hubungkan Wallet</h2>
               <p style={{ fontSize: "14px", color: "var(--color-text-secondary)", lineHeight: 1.6 }}>
-                CertChain berjalan di Aptos via Shelby Protocol.<br />
-                Hubungkan wallet Aptos Anda untuk melanjutkan.
+                CertChain Hub berjalan di Shelby Network.<br />
+                Hubungkan wallet Shelby/Aptos Anda untuk melanjutkan.
               </p>
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: "10px", maxWidth: "340px", margin: "0 auto" }}>
@@ -707,7 +707,7 @@ export default function Home() {
               <div>
                 <h2 style={{ fontSize: "18px", fontWeight: 600 }}>{isEdit ? "Perbarui Profil" : "Buat Profil Baru"}</h2>
                 <p style={{ fontSize: "13px", color: "var(--color-text-secondary)" }}>
-                  Identitas on-chain portofolio Anda di Aptos
+                  Identitas on-chain portofolio Anda di Shelby Network
                 </p>
               </div>
             </div>
@@ -980,7 +980,7 @@ export default function Home() {
               <div>
                 <h2 style={{ fontSize: "18px", fontWeight: 600 }}>Buat Organisasi</h2>
                 <p style={{ fontSize: "13px", color: "var(--color-text-secondary)" }}>
-                  Terbitkan sertifikat portofolio digital di Shelby + Aptos
+                  Terbitkan sertifikat portofolio digital di Shelby Network
                 </p>
               </div>
             </div>
@@ -1007,12 +1007,12 @@ export default function Home() {
                 placeholder="https://example.com"
               />
               <InfoBox cls="amber" icon="info-circle">
-                Alur Produksi: metadata JSON → Unggah ke Shelby storage → hash komitmen disimpan di Aptos via SBT smart contract.
+                Alur Produksi: metadata JSON → Unggah ke Shelby storage → hash komitmen disimpan di Shelby Network via SBT smart contract.
               </InfoBox>
               <Btn onClick={handleCreateOrg} disabled={submitting || !orgName.trim()} full={true}>
                 {submitting ? (
                   <>
-                    <Spinner /> Mengunggah ke Shelby & Aptos...
+                    <Spinner /> Mengunggah ke Shelby Network...
                   </>
                 ) : (
                   <>
@@ -1138,7 +1138,7 @@ export default function Home() {
                             req={true}
                           />
                           <InfoBox cls="teal" icon="route">
-                            Sertifikat akan diunggah ke Shelby Storage (desentralisasi) kemudian dicetak sebagai Soulbound Token (SBT) non-transferable di Aptos.
+                            Sertifikat akan diunggah ke Shelby Storage (desentralisasi) kemudian dicetak sebagai Soulbound Token (SBT) non-transferable di Shelby Network.
                           </InfoBox>
                           <Btn
                             cls="btn-teal"

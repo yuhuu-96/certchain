@@ -14,8 +14,8 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "CertChain — Soulbound Certificates on Aptos",
-  description: "Issue and verify non-transferable certificates (SBT) on Aptos with decentralized metadata stored on Shelby Protocol blobs.",
+  title: "CertChain Hub",
+  description: "Issue and verify non-transferable certificates (SBT) on Shelby Network with decentralized metadata stored on Shelby Protocol blobs.",
 };
 
 export const viewport = {

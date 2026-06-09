@@ -163,7 +163,7 @@ function VerificationContent() {
           <div style={{ textAlign: "center", padding: "40px" }}>
             <span className="spinner spinner-dark" style={{ width: "30px", height: "30px", borderWidth: "3px" }} />
             <p style={{ marginTop: "14px", fontSize: "14px", color: "var(--color-text-secondary)" }}>
-              Melakukan verifikasi kriptografis di Aptos Testnet...
+              Melakukan verifikasi kriptografis di Shelby Testnet...
             </p>
           </div>
         )}
@@ -198,7 +198,7 @@ function VerificationContent() {
                 Kredensial Asli & Terverifikasi
               </h2>
               <p style={{ fontSize: "12px", color: "var(--color-teal)", fontWeight: 500 }}>
-                Catatan ini ditemukan di Aptos Blockchain & Shelby Storage
+                Catatan ini ditemukan di Shelby Blockchain & Shelby Storage
               </p>
             </Card>
 
