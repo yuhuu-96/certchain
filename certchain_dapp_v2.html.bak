@@ -1,0 +1,579 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.fade-in{animation:fadeIn .2s ease both}
+input,textarea{font-family:inherit;font-size:14px;width:100%;padding:9px 12px;border-radius:8px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);outline:none;transition:border-color .15s,box-shadow .15s}
+input:focus,textarea:focus{border-color:#534AB7;box-shadow:0 0 0 3px #EEEDFE}
+textarea{resize:vertical;min-height:76px;line-height:1.5}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;border:none;transition:all .15s;font-family:inherit;white-space:nowrap}
+.btn:active{transform:scale(.97)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.btn-primary{background:#534AB7;color:#fff}
+.btn-primary:hover:not(:disabled){background:#3C3489}
+.btn-teal{background:#0F6E56;color:#fff}
+.btn-teal:hover:not(:disabled){background:#085041}
+.btn-ghost{background:transparent;color:var(--color-text-secondary);border:0.5px solid var(--color-border-secondary)}
+.btn-ghost:hover:not(:disabled){background:var(--color-background-secondary)}
+.btn-outline{background:transparent;color:#534AB7;border:1px solid #AFA9EC}
+.btn-outline:hover:not(:disabled){background:#EEEDFE}
+.btn-danger{background:#993C1D;color:#fff}
+.btn-danger:hover:not(:disabled){background:#712B13}
+.btn-full{width:100%;justify-content:center}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:12px;padding:1.1rem 1.25rem}
+.card-hover{cursor:pointer;transition:border-color .15s,box-shadow .15s}
+.card-hover:hover{border-color:var(--color-border-secondary);box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:500;padding:3px 9px;border-radius:20px}
+.badge-purple{background:#EEEDFE;color:#3C3489;border:0.5px solid #AFA9EC}
+.badge-teal{background:#E1F5EE;color:#085041;border:0.5px solid #5DCAA5}
+.badge-amber{background:#FAEEDA;color:#633806;border:0.5px solid #FAC775}
+.badge-coral{background:#FAECE7;color:#712B13;border:0.5px solid #F0997B}
+.badge-green{background:#EAF3DE;color:#27500A;border:0.5px solid #97C459}
+.avatar{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:500;flex-shrink:0}
+.av-purple{background:#EEEDFE;color:#3C3489}
+.av-teal{background:#E1F5EE;color:#085041}
+.av-coral{background:#FAECE7;color:#712B13}
+.spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .65s linear infinite;flex-shrink:0}
+.spinner-dark{border-color:rgba(83,74,183,.25);border-top-color:#534AB7}
+.nav-bar{display:flex;border-top:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary)}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 0 10px;border:none;background:transparent;cursor:pointer;font-family:inherit;font-size:11px;font-weight:400;color:var(--color-text-secondary);transition:color .15s}
+.nav-item.active{color:#534AB7;font-weight:500}
+.nav-item i{font-size:20px;line-height:1}
+.section-title{font-size:13px;font-weight:500;color:var(--color-text-secondary);letter-spacing:.4px;text-transform:uppercase;margin-bottom:10px}
+.info-box{border-radius:8px;padding:10px 12px;font-size:12px;display:flex;gap:8px;align-items:flex-start}
+.info-box-teal{background:#E1F5EE;color:#085041}
+.info-box-amber{background:#FAEEDA;color:#633806}
+.info-box-purple{background:#EEEDFE;color:#3C3489}
+.divider{height:0.5px;background:var(--color-border-tertiary);margin:14px 0}
+.field-label{font-size:13px;font-weight:500;color:var(--color-text-secondary);margin-bottom:5px;display:flex;align-items:center;gap:5px}
+.req{color:#D85A30}
+.stat-card{background:var(--color-background-secondary);border-radius:10px;padding:14px 12px;text-align:center}
+.stat-num{font-size:24px;font-weight:500;line-height:1.1;color:var(--color-text-primary)}
+.stat-label{font-size:12px;color:var(--color-text-secondary);margin-top:3px}
+.cert-visual{background:#EEEDFE;border-radius:12px;padding:24px;text-align:center;border:1px solid #AFA9EC;position:relative;overflow:hidden}
+.cert-visual::before{content:'';position:absolute;top:-30px;right:-30px;width:100px;height:100px;border-radius:50%;background:#CECBF6;opacity:.35}
+.cert-visual::after{content:'';position:absolute;bottom:-20px;left:-20px;width:70px;height:70px;border-radius:50%;background:#5DCAA5;opacity:.18}
+.empty-state{text-align:center;padding:40px 20px;color:var(--color-text-secondary)}
+.empty-icon{width:52px;height:52px;border-radius:50%;background:var(--color-background-secondary);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:22px}
+.connecting-dot{width:7px;height:7px;border-radius:50%;background:#0F6E56;animation:pulse 1.4s ease-in-out infinite}
+.connecting-dot:nth-child(2){animation-delay:.2s}
+.connecting-dot:nth-child(3){animation-delay:.4s}
+</style>
+
+<h2 class="sr-only">CertChain — Shelby Protocol sertifikasi portofolio dApp</h2>
+<div id="app" style="max-width:640px;margin:0 auto;min-height:600px;display:flex;flex-direction:column"></div>
+
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script>
+const {useState,useEffect,useRef,createElement:h,Fragment}=React;
+
+const store={profiles:{},orgs:{},campaigns:{},certificates:{},nextCId:1,nextCertId:1};
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+
+const Icon=({n,size=18,style:sx})=>h('i',{'aria-hidden':'true',className:`ti ti-${n}`,style:{fontSize:size,...sx}});
+
+const Spinner=({dark})=>h('span',{className:dark?'spinner spinner-dark':'spinner'});
+
+const Badge=({children,color='purple',icon})=>h('span',{className:`badge badge-${color}`},
+  icon&&h(Icon,{n:icon,size:11}),children);
+
+const Btn=({children,onClick,disabled,cls='btn-primary',full,size,style:sx,type})=>
+  h('button',{type:type||'button',onClick,disabled,className:`btn ${cls}${full?' btn-full':''}`,style:{fontSize:size==='sm'?13:14,...sx}},children);
+
+const Card=({children,style:sx,onClick,hover})=>
+  h('div',{className:`card${hover?' card-hover':''}`,onClick,style:sx},children);
+
+const Av=({name,size=40,color='purple'})=>{
+  const ini=(name||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  return h('div',{className:`avatar av-${color}`,style:{width:size,height:size,fontSize:size*.34}},ini);
+};
+
+const Lbl=({children,req:r})=>h('div',{className:'field-label'},children,r&&h('span',{className:'req'},' *'));
+
+const Fld=({label,value,onChange,placeholder,multi,req})=>
+  h('div',{style:{marginBottom:14}},
+    h(Lbl,{req},label),
+    multi
+      ?h('textarea',{value,onChange:e=>onChange(e.target.value),placeholder})
+      :h('input',{type:'text',value,onChange:e=>onChange(e.target.value),placeholder})
+  );
+
+const InfoBox=({cls,icon,children})=>h('div',{className:`info-box info-box-${cls}`,style:{marginBottom:12}},
+  h(Icon,{n:icon,size:15,style:{flexShrink:0,marginTop:1}}),
+  h('span',null,children));
+
+const Empty=({icon,title,desc,action})=>h('div',{className:'empty-state'},
+  h('div',{className:'empty-icon'},h(Icon,{n:icon,size:22,style:{color:'var(--color-text-secondary)'}})),
+  h('p',{style:{fontWeight:500,color:'var(--color-text-primary)',marginBottom:4}},title),
+  h('p',{style:{fontSize:13,marginBottom:action?14:0}},desc),
+  action);
+
+const Modal=({children,onClose})=>h('div',{
+  style:{position:'absolute',inset:0,background:'rgba(0,0,0,.45)',display:'flex',alignItems:'center',justifyContent:'center',padding:16,zIndex:50,borderRadius:12},
+  onClick:onClose},
+  h('div',{onClick:e=>e.stopPropagation(),className:'card fade-in',style:{width:'100%',maxWidth:480,position:'relative'}},
+    children));
+
+const ConnectView=({onConnect})=>{
+  const [loading,setLoading]=useState(null);
+  const wallets=[
+    {n:'Petra',icon:'wallet',color:'#534AB7'},
+    {n:'Martian',icon:'rocket',color:'#185FA5'},
+    {n:'Pontem',icon:'diamond',color:'#993C1D'},
+    {n:'Nightly',icon:'moon',color:'#444441'},
+  ];
+  const go=async w=>{
+    setLoading(w.n);await sleep(900);
+    onConnect({address:'0x'+Math.random().toString(16).slice(2,14)+'a9f3',wallet:w.n});
+  };
+  return h('div',{className:'fade-in',style:{padding:'32px 20px'}},
+    h('div',{style:{textAlign:'center',marginBottom:32}},
+      h('div',{style:{width:64,height:64,borderRadius:16,background:'#EEEDFE',display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto 16px'}},
+        h(Icon,{n:'link',size:30,style:{color:'#534AB7'}})),
+      h('h2',{style:{fontSize:20,fontWeight:500,marginBottom:6}},'Connect your wallet'),
+      h('p',{style:{fontSize:14,color:'var(--color-text-secondary)',lineHeight:1.6}},'CertChain runs on Aptos via Shelby Protocol.\nConnect a compatible wallet to continue.')
+    ),
+    h('div',{style:{display:'flex',flexDirection:'column',gap:8,maxWidth:340,margin:'0 auto'}},
+      wallets.map(w=>h('button',{
+        key:w.n,onClick:()=>go(w),disabled:!!loading,
+        style:{display:'flex',alignItems:'center',gap:12,padding:'12px 16px',borderRadius:10,background:'var(--color-background-primary)',border:'0.5px solid var(--color-border-secondary)',cursor:loading?'not-allowed':'pointer',opacity:loading&&loading!==w.n?.5:1,transition:'all .15s',fontFamily:'inherit'}},
+        h('div',{style:{width:36,height:36,borderRadius:8,background:w.color+'18',display:'flex',alignItems:'center',justifyContent:'center'}},
+          h(Icon,{n:w.icon,size:18,style:{color:w.color}})),
+        h('span',{style:{flex:1,textAlign:'left',fontWeight:500,fontSize:14,color:'var(--color-text-primary)'}},(loading===w.n?'Connecting…':w.n+' Wallet')),
+        loading===w.n?h(Spinner,{dark:true}):h(Icon,{n:'chevron-right',size:16,style:{color:'var(--color-text-secondary)'}})
+      ))
+    ),
+    loading&&h('div',{style:{display:'flex',justifyContent:'center',gap:6,marginTop:24}},
+      [0,1,2].map(i=>h('div',{key:i,className:'connecting-dot',style:{animationDelay:i*.2+'s'}}))),
+    h('p',{style:{fontSize:11,color:'var(--color-text-secondary)',textAlign:'center',marginTop:20}},
+      '@shelby-protocol/react · @aptos-labs/wallet-adapter-react · Testnet')
+  );
+};
+
+const CreateProfileView=({account,onDone})=>{
+  const ex=store.profiles[account.address]||{};
+  const [name,setName]=useState(ex.name||'');
+  const [bio,setBio]=useState(ex.bio||'');
+  const [twitter,setTwitter]=useState(ex.twitter||'');
+  const [github,setGithub]=useState(ex.github||'');
+  const [loading,setLoading]=useState(false);
+  const submit=async()=>{
+    if(!name.trim())return;
+    setLoading(true);await sleep(800);
+    store.profiles[account.address]={name,bio,twitter,github,createdAt:Date.now()};
+    store.certificates[account.address]=store.certificates[account.address]||[];
+    setLoading(false);onDone();
+  };
+  return h('div',{className:'fade-in',style:{padding:'0 20px 20px'}},
+    h('div',{style:{display:'flex',alignItems:'center',gap:12,marginBottom:24,paddingTop:4}},
+      h('div',{style:{width:44,height:44,borderRadius:10,background:'#EEEDFE',display:'flex',alignItems:'center',justifyContent:'center'}},
+        h(Icon,{n:'user-circle',size:22,style:{color:'#534AB7'}})),
+      h('div',null,
+        h('h2',{style:{fontSize:18,fontWeight:500}},ex.name?'Edit profile':'Create profile'),
+        h('p',{style:{fontSize:13,color:'var(--color-text-secondary)'}},'Your on-chain identity on CertChain'))
+    ),
+    h(Card,null,
+      h('div',{style:{display:'flex',alignItems:'center',gap:8,padding:'8px 10px',background:'var(--color-background-secondary)',borderRadius:8,marginBottom:16}},
+        h(Icon,{n:'lock',size:13,style:{color:'var(--color-text-secondary)',flexShrink:0}}),
+        h('code',{style:{fontSize:11,color:'var(--color-text-secondary)',wordBreak:'break-all'}},account.address)
+      ),
+      h(Fld,{label:'Full name',value:name,onChange:setName,placeholder:'Alice Chen',req:true}),
+      h(Fld,{label:'Bio',value:bio,onChange:setBio,placeholder:'Web3 developer & lifelong learner',multi:true}),
+      h('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}},
+        h('div',null,
+          h(Lbl,null,h(Icon,{n:'brand-twitter',size:13}),' Twitter / X'),
+          h('input',{type:'text',value:twitter,onChange:e=>setTwitter(e.target.value),placeholder:'@username',style:{width:'100%',marginTop:5}})),
+        h('div',null,
+          h(Lbl,null,h(Icon,{n:'brand-github',size:13}),' GitHub'),
+          h('input',{type:'text',value:github,onChange:e=>setGithub(e.target.value),placeholder:'username',style:{width:'100%',marginTop:5}}))
+      ),
+      h('div',{style:{marginTop:16}},
+        h(Btn,{onClick:submit,disabled:!name.trim()||loading,full:true},
+          loading?h(Fragment,null,h(Spinner),'Saving on-chain…'):
+          h(Fragment,null,h(Icon,{n:'check',size:16}),(ex.name?'Save changes':'Create profile'))))
+    )
+  );
+};
+
+const CertCard=({cert,onView})=>{
+  const camp=store.campaigns[cert.campaignId]||{};
+  const org=store.orgs[camp.orgAddress]||{};
+  return h(Card,{hover:true,onClick:onView,style:{display:'flex',gap:12,alignItems:'flex-start'}},
+    h('div',{style:{width:46,height:46,borderRadius:10,background:'#EEEDFE',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}},
+      h(Icon,{n:'certificate',size:22,style:{color:'#534AB7'}})),
+    h('div',{style:{flex:1,minWidth:0}},
+      h('div',{style:{fontWeight:500,fontSize:14,marginBottom:3,color:'var(--color-text-primary)'}},camp.name||'Certificate'),
+      h('div',{style:{display:'flex',alignItems:'center',gap:5,fontSize:12,color:'var(--color-text-secondary)',marginBottom:8}},
+        h(Icon,{n:'building',size:13}),org.name||'Unknown Organization'),
+      h('div',{style:{display:'flex',gap:6,flexWrap:'wrap'}},
+        h(Badge,{color:'teal',icon:'database'},'On-chain'),
+        h(Badge,{color:'purple',icon:'cloud'},'Shelby Blob')
+      )
+    ),
+    h('div',{style:{flexShrink:0,textAlign:'right'}},
+      h('div',{style:{fontSize:11,color:'var(--color-text-secondary)',marginBottom:4}},new Date(cert.issuedAt).toLocaleDateString()),
+      h(Icon,{n:'chevron-right',size:15,style:{color:'var(--color-text-secondary)'}})
+    )
+  );
+};
+
+const CertDetailView=({cert,onBack})=>{
+  const camp=store.campaigns[cert.campaignId]||{};
+  const org=store.orgs[camp.orgAddress]||{};
+  return h('div',{className:'fade-in',style:{padding:'0 20px 20px'}},
+    h('button',{onClick:onBack,style:{display:'flex',alignItems:'center',gap:6,color:'var(--color-text-secondary)',background:'none',border:'none',cursor:'pointer',fontSize:14,marginBottom:16,fontFamily:'inherit'}},
+      h(Icon,{n:'arrow-left',size:16}),'Back to portfolio'),
+    h('div',{className:'cert-visual',style:{marginBottom:16}},
+      h('div',{style:{width:56,height:56,borderRadius:14,background:'#534AB7',display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto 12px',position:'relative',zIndex:1}},
+        h(Icon,{n:'certificate',size:28,style:{color:'#fff'}})),
+      h('div',{style:{fontWeight:500,fontSize:18,color:'#3C3489',marginBottom:4,position:'relative',zIndex:1}},camp.name||'Certificate'),
+      h('div',{style:{fontSize:13,color:'#085041',marginBottom:10,position:'relative',zIndex:1}},
+        h(Icon,{n:'building',size:13}),' ',(org.name||'Unknown')),
+      h('div',{style:{display:'flex',justifyContent:'center',gap:8,position:'relative',zIndex:1}},
+        h(Badge,{color:'teal',icon:'shield-check'},'Verified'),
+        h(Badge,{color:'purple',icon:'link'},'On-chain'))
+    ),
+    h(Card,null,
+      [
+        ['Credential ID',`CERT-${String(cert.id).padStart(6,'0')}`,null,'id'],
+        ['Issued on',new Date(cert.issuedAt).toLocaleDateString('id-ID',{weekday:'long',year:'numeric',month:'long',day:'numeric'}),null,'calendar'],
+        ['Issued by',org.name||'—',null,'building'],
+        ['Campaign',camp.desc||'—',null,'target'],
+        ['Blob URL',cert.blobUrl,'mono','cloud'],
+      ].map(([k,v,type,icon])=>h('div',{key:k,style:{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'10px 0',borderBottom:'0.5px solid var(--color-border-tertiary)'}},
+        h('div',{style:{display:'flex',alignItems:'center',gap:7,fontSize:13,color:'var(--color-text-secondary)'}},
+          h(Icon,{n:icon,size:14}),k),
+        h('div',{style:{fontSize:type==='mono'?11:13,fontFamily:type==='mono'?'var(--font-mono)':'inherit',color:'var(--color-text-primary)',maxWidth:220,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap',textAlign:'right'}},v)
+      )),
+      h('div',{style:{display:'flex',gap:8,marginTop:14}},
+        h(Btn,{cls:'btn-teal',size:'sm'},h(Icon,{n:'external-link',size:14}),'View on Explorer'),
+        h(Btn,{cls:'btn-ghost',size:'sm'},h(Icon,{n:'copy',size:14}),'Copy ID')
+      )
+    )
+  );
+};
+
+const Dashboard=({account,onNav,onViewCert})=>{
+  const profile=store.profiles[account.address]||{};
+  const myOrg=store.orgs[account.address];
+  const certs=store.certificates[account.address]||[];
+  return h('div',{className:'fade-in',style:{padding:'0 20px 20px'}},
+    h(Card,{style:{display:'flex',gap:14,alignItems:'center',marginBottom:16}},
+      h(Av,{name:profile.name,size:52,color:'purple'}),
+      h('div',{style:{flex:1,minWidth:0}},
+        h('div',{style:{fontWeight:500,fontSize:16,marginBottom:3}},profile.name),
+        h('div',{style:{fontSize:13,color:'var(--color-text-secondary)',marginBottom:8,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}},profile.bio||'No bio yet'),
+        h('div',{style:{display:'flex',gap:6,flexWrap:'wrap'}},
+          h(Badge,{color:'teal',icon:'certificate'},certs.length+' certificates'),
+          myOrg&&h(Badge,{color:'purple',icon:'building'},'Org owner')
+        )
+      ),
+      h(Btn,{cls:'btn-ghost',size:'sm',onClick:()=>onNav('edit-profile')},h(Icon,{n:'pencil',size:14}),'Edit')
+    ),
+    h('div',{style:{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:10,marginBottom:20}},
+      [
+        ['Certificates',certs.length,'certificate','purple'],
+        ['Organizations',Object.keys(store.orgs).length,'building','teal'],
+        ['Campaigns',Object.keys(store.campaigns).length,'target','coral'],
+      ].map(([label,val,icon,color])=>
+        h('div',{key:label,className:'stat-card'},
+          h('div',{style:{width:32,height:32,borderRadius:8,background:color==='purple'?'#EEEDFE':color==='teal'?'#E1F5EE':'#FAECE7',display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto 8px'}},
+            h(Icon,{n:icon,size:17,style:{color:color==='purple'?'#534AB7':color==='teal'?'#0F6E56':'#993C1D'}})),
+          h('div',{className:'stat-num'},val),
+          h('div',{className:'stat-label'},label)
+        )
+      )
+    ),
+    h('div',{style:{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:10}},
+      h('div',{className:'section-title',style:{margin:0}},'My certificates'),
+      h(Badge,{color:'teal'},certs.length+' total')
+    ),
+    certs.length===0
+      ? h(Empty,{icon:'inbox',title:'No certificates yet',desc:'Organizations will issue certificates directly to your wallet address'})
+      : h('div',{style:{display:'flex',flexDirection:'column',gap:8}},
+          certs.map(cert=>h(CertCard,{key:cert.id,cert,onView:()=>onViewCert(cert)}))
+        ),
+    !myOrg&&h(Card,{style:{marginTop:16,background:'#EEEDFE',border:'1px solid #AFA9EC'}},
+      h('div',{style:{display:'flex',gap:14,alignItems:'center'}},
+        h('div',{style:{width:44,height:44,borderRadius:10,background:'#534AB7',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}},
+          h(Icon,{n:'building-plus',size:22,style:{color:'#fff'}})),
+        h('div',{style:{flex:1}},
+          h('div',{style:{fontWeight:500,fontSize:14,color:'#3C3489',marginBottom:3}},'Issue certificates?'),
+          h('div',{style:{fontSize:13,color:'#534AB7'}},'Create an organization to get started')),
+        h(Btn,{cls:'btn-primary',size:'sm',onClick:()=>onNav('create-org')},h(Icon,{n:'arrow-right',size:14}),'Create')
+      )
+    ),
+    myOrg&&h(Card,{style:{marginTop:16,background:'#E1F5EE',border:'1px solid #5DCAA5'},hover:true,onClick:()=>onNav('org-dashboard')},
+      h('div',{style:{display:'flex',alignItems:'center',gap:12}},
+        h(Av,{name:myOrg.name,size:40,color:'teal'}),
+        h('div',{style:{flex:1}},
+          h('div',{style:{fontSize:12,color:'#0F6E56',fontWeight:500,marginBottom:2}},'Your organization'),
+          h('div',{style:{fontWeight:500}},myOrg.name)
+        ),
+        h(Icon,{n:'chevron-right',size:18,style:{color:'#0F6E56'}})
+      )
+    )
+  );
+};
+
+const CreateOrgView=({account,onDone})=>{
+  const [name,setName]=useState('');
+  const [desc,setDesc]=useState('');
+  const [website,setWebsite]=useState('');
+  const [loading,setLoading]=useState(false);
+  const existing=store.orgs[account.address];
+  if(existing)return h('div',{className:'fade-in',style:{padding:'20px'}},
+    h(Card,{style:{textAlign:'center'}},
+      h('div',{style:{width:56,height:56,borderRadius:14,background:'#E1F5EE',display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto 12px'}},
+        h(Icon,{n:'circle-check',size:28,style:{color:'#0F6E56'}})),
+      h('div',{style:{fontWeight:500,fontSize:16,marginBottom:4}},existing.name),
+      h('div',{style:{fontSize:13,color:'var(--color-text-secondary)',marginBottom:16}},
+        'You already have an organization registered'),
+      h(Btn,{onClick:onDone,full:true},h(Icon,{n:'arrow-right',size:16}),'Go to dashboard')
+    )
+  );
+  const submit=async()=>{
+    if(!name.trim())return;
+    setLoading(true);await sleep(900);
+    store.orgs[account.address]={name,desc,website,verified:false,createdAt:Date.now()};
+    setLoading(false);onDone();
+  };
+  return h('div',{className:'fade-in',style:{padding:'0 20px 20px'}},
+    h('div',{style:{display:'flex',alignItems:'center',gap:12,marginBottom:20,paddingTop:4}},
+      h('div',{style:{width:44,height:44,borderRadius:10,background:'#E1F5EE',display:'flex',alignItems:'center',justifyContent:'center'}},
+        h(Icon,{n:'building',size:22,style:{color:'#0F6E56'}})),
+      h('div',null,
+        h('h2',{style:{fontSize:18,fontWeight:500}},'Create organization'),
+        h('p',{style:{fontSize:13,color:'var(--color-text-secondary)'}},'Issue certificates on Shelby + Aptos'))),
+    h(Card,null,
+      h(Fld,{label:'Organization name',value:name,onChange:setName,placeholder:'Shelby Indonesia Academy',req:true}),
+      h(Fld,{label:'Description',value:desc,onChange:setDesc,placeholder:'We run Web3 bootcamps and certify developers',multi:true}),
+      h(Fld,{label:'Website',value:website,onChange:setWebsite,placeholder:'https://example.com'}),
+      h(InfoBox,{cls:'amber',icon:'info-circle'},'Production: metadata JSON → Shelby blob upload → hash registered on Aptos via Move smart contract'),
+      h(Btn,{onClick:submit,disabled:!name.trim()||loading,full:true},
+        loading?h(Fragment,null,h(Spinner),'Uploading to Shelby…'):
+        h(Fragment,null,h(Icon,{n:'cloud-upload',size:16}),'Register organization'))
+    )
+  );
+};
+
+const IssueCerts=({campaign,orgAddress})=>{
+  const [addrs,setAddrs]=useState('');
+  const [loading,setLoading]=useState(false);
+  const [result,setResult]=useState(null);
+  const recipients=addrs.split(/[\n,]+/).map(a=>a.trim()).filter(Boolean);
+  const issue=async()=>{
+    if(!recipients.length)return;
+    setLoading(true);await sleep(1100);
+    recipients.forEach(addr=>{
+      const blobUrl=`https://api.testnet.shelby.xyz/shelby/v1/blobs/${orgAddress}/cert-${campaign.id}-${addr.slice(-6)}.json`;
+      if(!store.certificates[addr])store.certificates[addr]=[];
+      store.certificates[addr].push({id:store.nextCertId++,campaignId:campaign.id,issuedAt:Date.now(),blobUrl});
+    });
+    setLoading(false);setResult(recipients.length);setAddrs('');
+  };
+  return h('div',{style:{marginTop:14,paddingTop:14,borderTop:'0.5px solid var(--color-border-tertiary)'}},
+    h('div',{className:'section-title'},'Issue certificates'),
+    h(Fld,{label:'Recipient wallet addresses',value:addrs,onChange:setAddrs,placeholder:'0xabc123...\n0xdef456...\n(one per line or comma-separated)',multi:true}),
+    h(InfoBox,{cls:'teal',icon:'route'},'Flow: build cert JSON → upload to Shelby (get blobUrl) → register on Aptos → mint SBT to recipient'),
+    h(Btn,{cls:'btn-teal',onClick:issue,disabled:!addrs.trim()||loading},
+      loading?h(Fragment,null,h(Spinner),'Uploading & minting…'):
+      h(Fragment,null,h(Icon,{n:'send',size:15}),`Issue to ${recipients.length||0} recipient(s)`)),
+    result&&h('div',{style:{marginTop:10,display:'flex',alignItems:'center',gap:8,padding:'8px 12px',background:'#E1F5EE',borderRadius:8,fontSize:13,color:'#085041'}},
+      h(Icon,{n:'circle-check',size:16}),`${result} certificate(s) issued · blobs registered on Shelby testnet`)
+  );
+};
+
+const OrgDashboard=({account,onNav})=>{
+  const org=store.orgs[account.address];
+  const myCamps=Object.entries(store.campaigns).filter(([,c])=>c.orgAddress===account.address).map(([id,c])=>({id:parseInt(id),...c}));
+  const [showCreate,setShowCreate]=useState(false);
+  const [campName,setCampName]=useState('');
+  const [campDesc,setCampDesc]=useState('');
+  const [loading,setLoading]=useState(false);
+  const [open,setOpen]=useState(null);
+  if(!org)return h('div',{className:'fade-in',style:{padding:'20px'}},
+    h(Empty,{icon:'building',title:'No organization',desc:'Create an organization to start issuing certificates',
+      action:h(Btn,{onClick:()=>onNav('create-org')},h(Icon,{n:'plus',size:16}),'Create organization')}));
+  const createCamp=async()=>{
+    if(!campName.trim())return;
+    setLoading(true);await sleep(700);
+    const id=store.nextCId++;
+    store.campaigns[id]={orgAddress:account.address,name:campName,desc:campDesc,createdAt:Date.now()};
+    setCampName('');setCampDesc('');setLoading(false);setShowCreate(false);
+  };
+  return h('div',{className:'fade-in',style:{padding:'0 20px 20px'}},
+    h(Card,{style:{display:'flex',gap:12,alignItems:'center',marginBottom:16}},
+      h(Av,{name:org.name,size:48,color:'teal'}),
+      h('div',{style:{flex:1,minWidth:0}},
+        h('div',{style:{fontWeight:500,fontSize:15,marginBottom:2}},org.name),
+        h('div',{style:{fontSize:13,color:'var(--color-text-secondary)',marginBottom:6,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}},org.desc||'No description'),
+        h('div',{style:{display:'flex',gap:6}},
+          h(Badge,{color:'teal',icon:'target'},myCamps.length+' campaigns'),
+          org.website&&h(Badge,{color:'gray',icon:'world'},org.website.replace('https://','').slice(0,18)))
+      )
+    ),
+    h('div',{style:{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:12}},
+      h('div',{className:'section-title',style:{margin:0}},'Campaigns'),
+      h(Btn,{cls:'btn-primary',size:'sm',onClick:()=>setShowCreate(true)},h(Icon,{n:'plus',size:14}),'New campaign')
+    ),
+    showCreate&&h(Card,{style:{marginBottom:12,border:'1px solid #AFA9EC',background:'#EEEDFE'}},
+      h('div',{style:{fontWeight:500,fontSize:14,marginBottom:12,color:'#3C3489',display:'flex',alignItems:'center',gap:8}},
+        h(Icon,{n:'target',size:16}),'New campaign'),
+      h(Fld,{label:'Campaign name',value:campName,onChange:setCampName,placeholder:'Web3 Bootcamp Batch 1',req:true}),
+      h(Fld,{label:'Description',value:campDesc,onChange:setCampDesc,placeholder:'6-week intensive Solidity + Aptos course',multi:true}),
+      h('div',{style:{display:'flex',gap:8}},
+        h(Btn,{onClick:createCamp,disabled:!campName.trim()||loading},
+          loading?h(Fragment,null,h(Spinner),'Creating…'):h(Fragment,null,h(Icon,{n:'check',size:14}),'Create')),
+        h(Btn,{cls:'btn-ghost',onClick:()=>setShowCreate(false)},h(Icon,{n:'x',size:14}),'Cancel'))
+    ),
+    myCamps.length===0&&!showCreate
+      ? h(Empty,{icon:'target',title:'No campaigns yet',desc:'Create a campaign to start issuing certificates'})
+      : h('div',{style:{display:'flex',flexDirection:'column',gap:8}},
+          myCamps.map(camp=>{
+            const certCount=Object.values(store.certificates).flat().filter(c=>c.campaignId===camp.id).length;
+            const isOpen=open===camp.id;
+            return h(Card,{key:camp.id},
+              h('div',{style:{display:'flex',justifyContent:'space-between',alignItems:'flex-start',cursor:'pointer'},onClick:()=>setOpen(isOpen?null:camp.id)},
+                h('div',{style:{flex:1,minWidth:0,marginRight:12}},
+                  h('div',{style:{fontWeight:500,fontSize:14,marginBottom:3}},camp.name),
+                  h('div',{style:{fontSize:12,color:'var(--color-text-secondary)',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}},camp.desc||'No description')
+                ),
+                h('div',{style:{display:'flex',flexDirection:'column',gap:4,alignItems:'flex-end',flexShrink:0}},
+                  h(Badge,{color:'purple',icon:'hash'},''+camp.id),
+                  h(Badge,{color:'teal',icon:'certificate'},certCount+' issued'),
+                  h('div',{style:{display:'flex',alignItems:'center',gap:4,fontSize:11,color:'var(--color-text-secondary)',marginTop:2}},
+                    h(Icon,{n:isOpen?'chevron-up':'chevron-down',size:13}),isOpen?'Close':'Issue')
+                )
+              ),
+              isOpen&&h(IssueCerts,{campaign:camp,orgAddress:account.address})
+            );
+          })
+        )
+  );
+};
+
+const ExploreView=({account})=>{
+  const [tab,setTab]=useState('orgs');
+  const orgs=Object.entries(store.orgs).map(([addr,o])=>({addr,...o}));
+  const camps=Object.entries(store.campaigns).map(([id,c])=>({id:parseInt(id),...c}));
+  return h('div',{className:'fade-in',style:{padding:'0 20px 20px'}},
+    h('div',{style:{display:'flex',gap:6,marginBottom:16}},
+      ['orgs','campaigns'].map(t=>h('button',{
+        key:t,onClick:()=>setTab(t),
+        style:{flex:1,padding:'9px',borderRadius:8,border:'0.5px solid',fontFamily:'inherit',fontWeight:500,fontSize:13,cursor:'pointer',transition:'all .15s',
+          borderColor:tab===t?'#AFA9EC':'var(--color-border-tertiary)',
+          background:tab===t?'#EEEDFE':'transparent',
+          color:tab===t?'#3C3489':'var(--color-text-secondary)'}},
+        h(Icon,{n:t==='orgs'?'building':'target',size:14,style:{verticalAlign:-2}}),' ',(t==='orgs'?'Organizations':'Campaigns')
+      ))
+    ),
+    tab==='orgs'&&(orgs.length===0
+      ? h(Empty,{icon:'building',title:'No organizations yet',desc:'Be the first to create one!'})
+      : h('div',{style:{display:'flex',flexDirection:'column',gap:8}},
+          orgs.map(org=>{
+            const n=camps.filter(c=>c.orgAddress===org.addr).length;
+            return h(Card,{key:org.addr},
+              h('div',{style:{display:'flex',gap:12,alignItems:'center'}},
+                h(Av,{name:org.name,size:42,color:'teal'}),
+                h('div',{style:{flex:1,minWidth:0}},
+                  h('div',{style:{fontWeight:500,fontSize:14,marginBottom:2}},org.name),
+                  h('div',{style:{fontSize:12,color:'var(--color-text-secondary)',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}},org.desc||'—')
+                ),
+                h('div',{style:{display:'flex',flexDirection:'column',gap:4,alignItems:'flex-end',flexShrink:0}},
+                  h(Badge,{color:'teal',icon:'target'},n+' campaigns'),
+                  org.verified&&h(Badge,{color:'green',icon:'shield-check'},'Verified'))
+              )
+            );
+          })
+        )
+    ),
+    tab==='campaigns'&&(camps.length===0
+      ? h(Empty,{icon:'target',title:'No campaigns yet',desc:'Organizations will create campaigns here'})
+      : h('div',{style:{display:'flex',flexDirection:'column',gap:8}},
+          camps.map(camp=>{
+            const org=store.orgs[camp.orgAddress]||{};
+            const n=Object.values(store.certificates).flat().filter(c=>c.campaignId===camp.id).length;
+            return h(Card,{key:camp.id},
+              h('div',{style:{display:'flex',justifyContent:'space-between',alignItems:'flex-start'}},
+                h('div',{style:{flex:1,minWidth:0,marginRight:12}},
+                  h('div',{style:{fontWeight:500,fontSize:14,marginBottom:3}},camp.name),
+                  h('div',{style:{display:'flex',alignItems:'center',gap:5,fontSize:12,color:'var(--color-text-secondary)',marginBottom:4}},
+                    h(Icon,{n:'building',size:13}),'by '+org.name),
+                  h('div',{style:{fontSize:12,color:'var(--color-text-secondary)',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}},camp.desc||'—')
+                ),
+                h('div',{style:{display:'flex',flexDirection:'column',gap:4,alignItems:'flex-end',flexShrink:0}},
+                  h(Badge,{color:'purple',icon:'hash'},''+camp.id),
+                  h(Badge,{color:'teal',icon:'certificate'},n+' issued'))
+              )
+            );
+          })
+        )
+    )
+  );
+};
+
+const NAV=[
+  {id:'dashboard',label:'Portfolio',icon:'layout-dashboard'},
+  {id:'org-dashboard',label:'Organization',icon:'building'},
+  {id:'explore',label:'Explore',icon:'compass'},
+];
+
+function App(){
+  const [account,setAccount]=useState(null);
+  const [view,setView]=useState('connect');
+  const [certDetail,setCertDetail]=useState(null);
+
+  const handleConnect=acc=>{
+    setAccount(acc);
+    setView(store.profiles[acc.address]?'dashboard':'create-profile');
+  };
+  const onNav=v=>{setCertDetail(null);setView(v);};
+
+  const hasProfile=account&&store.profiles[account.address];
+
+  const renderView=()=>{
+    if(certDetail&&view==='dashboard')return h(CertDetailView,{cert:certDetail,onBack:()=>setCertDetail(null)});
+    switch(view){
+      case 'connect':return h(ConnectView,{onConnect:handleConnect});
+      case 'create-profile':return h(CreateProfileView,{account,onDone:()=>setView('dashboard')});
+      case 'edit-profile':return h(CreateProfileView,{account,onDone:()=>setView('dashboard')});
+      case 'dashboard':return h(Dashboard,{account,onNav,onViewCert:cert=>{setCertDetail(cert);setView('dashboard')}});
+      case 'create-org':return h(CreateOrgView,{account,onDone:()=>setView('org-dashboard')});
+      case 'org-dashboard':return h(OrgDashboard,{account,onNav});
+      case 'explore':return h(ExploreView,{account});
+      default:return h(Dashboard,{account,onNav,onViewCert:cert=>{setCertDetail(cert);}});
+    }
+  };
+
+  return h('div',{style:{display:'flex',flexDirection:'column',minHeight:600}},
+    h('div',{style:{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'13px 20px 12px',borderBottom:'0.5px solid var(--color-border-tertiary)'}},
+      h('div',{style:{display:'flex',alignItems:'center',gap:10}},
+        h('div',{style:{width:32,height:32,borderRadius:8,background:'#534AB7',display:'flex',alignItems:'center',justifyContent:'center'}},
+          h(Icon,{n:'certificate',size:17,style:{color:'#fff'}})),
+        h('span',{style:{fontWeight:500,fontSize:15}},'CertChain'),
+        h(Badge,{color:'amber',icon:'test-pipe'},'Shelby Testnet')
+      ),
+      account&&h('div',{style:{display:'flex',alignItems:'center',gap:8}},
+        h('div',{style:{display:'flex',alignItems:'center',gap:5,fontSize:12,color:'var(--color-text-secondary)'}},
+          h(Icon,{n:'wallet',size:13}),
+          h('code',{style:{fontSize:11}},account.address.slice(0,8)+'…'+account.address.slice(-4))),
+        h(Badge,{color:'green',icon:'plug'},'Connected')
+      )
+    ),
+    h('div',{style:{flex:1,paddingTop:16}},renderView()),
+    hasProfile&&h('div',{className:'nav-bar'},
+      NAV.map(({id,label,icon})=>h('button',{
+        key:id,onClick:()=>onNav(id),
+        className:`nav-item${view===id?' active':''}`,
+      },h(Icon,{n:icon,size:20}),label))
+    )
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('app')).render(h(App));
+</script>
