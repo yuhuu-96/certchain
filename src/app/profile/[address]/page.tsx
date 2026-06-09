@@ -84,10 +84,10 @@ export default function PublicProfile() {
             <Icon n="alert-circle" size={24} style={{ color: "var(--color-red)" }} />
           </div>
           <h2 style={{ fontSize: "18px", fontWeight: 600, marginBottom: "8px", color: "var(--color-text-primary)" }}>
-            Profil Tidak Ditemukan
+            Profile Not Found
           </h2>
           <p style={{ fontSize: "14px", color: "var(--color-text-secondary)", marginBottom: "16px" }}>
-            Alamat wallet ini belum mendaftarkan profil mereka di CertChain.
+            This wallet address has not registered a profile on CertChain Hub dApp.
           </p>
           <code style={{ fontSize: "11px", display: "block", wordBreak: "break-all", background: "var(--color-background-secondary)", padding: "8px", borderRadius: "6px", color: "var(--color-text-secondary)" }}>
             {address}
@@ -120,7 +120,7 @@ export default function PublicProfile() {
             fontFamily: "inherit",
           }}
         >
-          <Icon n="arrow-left" size={16} /> Kembali ke daftar
+          <Icon n="arrow-left" size={16} /> Back to list
         </button>
         <div className="cert-visual" style={{ marginBottom: "16px" }}>
           <div
@@ -140,13 +140,13 @@ export default function PublicProfile() {
             <Icon n="certificate" size={28} style={{ color: "#fff" }} />
           </div>
           <div style={{ fontWeight: 600, fontSize: "18px", color: "var(--color-primary)", marginBottom: "4px", position: "relative", zIndex: 1 }}>
-            Sertifikat Terverifikasi
+            Verified Certificate
           </div>
           <div style={{ fontSize: "13px", color: "var(--color-teal)", marginBottom: "10px", position: "relative", zIndex: 1 }}>
             <Icon n="building" size={13} /> {cert.issuer.slice(0, 8) + "..." + cert.issuer.slice(-4)}
           </div>
           <div style={{ display: "flex", justifyContent: "center", gap: "8px", position: "relative", zIndex: 1 }}>
-            <Badge color="teal" icon="shield-check">Terverifikasi On-chain</Badge>
+            <Badge color="teal" icon="shield-check">Verified On-chain</Badge>
             <Badge color="purple" icon="link">SBT</Badge>
           </div>
         </div>
@@ -154,7 +154,7 @@ export default function PublicProfile() {
         <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "12px", marginBottom: "16px" }}>
           <Card style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "20px" }}>
             <p style={{ fontSize: "12px", fontWeight: 600, color: "var(--color-text-secondary)", marginBottom: "12px", textTransform: "uppercase" }}>
-              Scan QR Code untuk Verifikasi
+              Scan QR Code to Verify
             </p>
             {verifyUrl && (
               <img
@@ -169,13 +169,13 @@ export default function PublicProfile() {
         <Card>
           {[
             ["Credential ID", `CERT-${String(cert.id).padStart(6, "0")}`, "mono", "id"],
-            ["Tanggal Terbit", new Date(parseInt(cert.issued_at) * 1000).toLocaleDateString("id-ID", {
+            ["Issue Date", new Date(parseInt(cert.issued_at) * 1000).toLocaleDateString("en-US", {
               weekday: "long",
               year: "numeric",
               month: "long",
               day: "numeric",
             }), "text", "calendar"],
-            ["Issuer (Penerbit)", cert.issuer, "mono", "building"],
+            ["Issuer", cert.issuer, "mono", "building"],
             ["Blob URL (Shelby)", cert.blob_url, "mono", "cloud"],
           ].map(([k, v, type, icon]) => (
             <div
@@ -218,7 +218,7 @@ export default function PublicProfile() {
                 setTimeout(() => setCopiedId(null), 2000);
               }}
             >
-              <Icon n="copy" size={14} /> {copiedId === cert.id ? "Disalin!" : "Salin Credential ID"}
+              <Icon n="copy" size={14} /> {copiedId === cert.id ? "Copied!" : "Copy Credential ID"}
             </button>
           </div>
         </Card>
@@ -257,7 +257,7 @@ export default function PublicProfile() {
           >
             <Icon n="certificate" size={17} style={{ color: "#fff" }} />
           </div>
-          <span style={{ fontWeight: 600, fontSize: "15px" }}>CertChain Profil</span>
+          <span style={{ fontWeight: 600, fontSize: "15px" }}>CertChain Hub dApp</span>
         </div>
         <Badge color="teal" icon="shield">Public Viewer</Badge>
       </div>
@@ -296,14 +296,14 @@ export default function PublicProfile() {
         </Card>
 
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
-          <div className="section-title" style={{ margin: 0 }}>Koleksi Sertifikat ({certs.length})</div>
+          <div className="section-title" style={{ margin: 0 }}>Certificate Collection ({certs.length})</div>
           <Badge color="teal">Verified SBT</Badge>
         </div>
 
         {certs.length === 0 ? (
           <Card style={{ textAlign: "center", padding: "30px" }}>
             <Icon n="inbox" size={32} style={{ color: "var(--color-text-secondary)", marginBottom: "8px" }} />
-            <p style={{ fontSize: "13px", color: "var(--color-text-secondary)" }}>Belum ada sertifikat yang diterbitkan untuk profil ini.</p>
+            <p style={{ fontSize: "13px", color: "var(--color-text-secondary)" }}>No certificates have been issued for this profile yet.</p>
           </Card>
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
@@ -325,7 +325,7 @@ export default function PublicProfile() {
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontWeight: 600, fontSize: "14px", marginBottom: "3px" }}>
-                    Sertifikat Kelulusan #{cert.id}
+                    Certificate of Completion #{cert.id}
                   </div>
                   <div style={{ display: "flex", alignItems: "center", gap: "5px", fontSize: "12px", color: "var(--color-text-secondary)", marginBottom: "4px" }}>
                     <Icon n="building" size={12} /> Issuer: {cert.issuer.slice(0, 8) + "..." + cert.issuer.slice(-4)}
@@ -333,7 +333,7 @@ export default function PublicProfile() {
                 </div>
                 <div style={{ flexShrink: 0, textAlign: "right" }}>
                   <div style={{ fontSize: "11px", color: "var(--color-text-secondary)", marginBottom: "4px" }}>
-                    {new Date(parseInt(cert.issued_at) * 1000).toLocaleDateString()}
+                    {new Date(parseInt(cert.issued_at) * 1000).toLocaleDateString("en-US")}
                   </div>
                   <Icon n="chevron-right" size={15} style={{ color: "var(--color-text-secondary)" }} />
                 </div>

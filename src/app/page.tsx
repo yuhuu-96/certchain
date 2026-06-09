@@ -4,29 +4,26 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { useUploadBlobs } from "@shelby-protocol/react";
 import { useToast } from "@/components/Toast";
+import { ProfileSkeleton, ListSkeleton } from "@/components/LoadingSkeleton";
 import {
+  aptos,
+  MODULE_ADDRESS,
   getProfile,
   getOrganization,
   getCampaigns,
   getCertificates,
-  MODULE_ADDRESS,
-  aptos,
   OnChainProfile,
   OnChainOrganization,
   OnChainCampaign,
   OnChainCertificate,
 } from "@/utils/aptos";
-import { ProfileSkeleton, ListSkeleton } from "@/components/LoadingSkeleton";
 
-// Helper components
+// Icon Component
 const Icon = ({ n, size = 18, style: sx }: { n: string; size?: number; style?: React.CSSProperties }) => (
   <i className={`ti ti-${n}`} style={{ fontSize: `${size}px`, ...sx }} aria-hidden="true" />
 );
 
-const Spinner = ({ dark }: { dark?: boolean }) => (
-  <span className={dark ? "spinner spinner-dark" : "spinner"} />
-);
-
+// Badge Component
 const Badge = ({ children, color = "purple", icon }: { children: React.ReactNode; color?: string; icon?: string }) => (
   <span className={`badge badge-${color}`}>
     {icon && <Icon n={icon} size={11} />}
@@ -34,6 +31,7 @@ const Badge = ({ children, color = "purple", icon }: { children: React.ReactNode
   </span>
 );
 
+// Button Component
 const Btn = ({
   children,
   onClick,
@@ -64,12 +62,14 @@ const Btn = ({
   </button>
 );
 
+// Card Component
 const Card = ({ children, style: sx, onClick, hover }: { children: React.ReactNode; style?: React.CSSProperties; onClick?: () => void; hover?: boolean }) => (
   <div className={`card${hover ? " card-hover" : ""}`} onClick={onClick} style={sx}>
     {children}
   </div>
 );
 
+// Avatar Component
 const Av = ({ name, size = 40, color = "purple" }: { name: string; size?: number; color?: string }) => {
   const ini = (name || "?")
     .split(" ")
@@ -84,6 +84,7 @@ const Av = ({ name, size = 40, color = "purple" }: { name: string; size?: number
   );
 };
 
+// Form Label
 const Lbl = ({ children, req: r }: { children: React.ReactNode; req?: boolean }) => (
   <div className="field-label">
     {children}
@@ -91,6 +92,7 @@ const Lbl = ({ children, req: r }: { children: React.ReactNode; req?: boolean })
   </div>
 );
 
+// Form Input Field
 const Fld = ({
   label,
   value,
@@ -130,6 +132,7 @@ const Fld = ({
   </div>
 );
 
+// Info Box Component
 const InfoBox = ({ cls, icon, children }: { cls: string; icon: string; children: React.ReactNode }) => (
   <div className={`info-box info-box-${cls}`} style={{ marginBottom: "12px" }}>
     <Icon n={icon} size={15} style={{ flexShrink: 0, marginTop: "1px" }} />
@@ -137,6 +140,7 @@ const InfoBox = ({ cls, icon, children }: { cls: string; icon: string; children:
   </div>
 );
 
+// Empty State Component
 const Empty = ({ icon, title, desc, action }: { icon: string; title: string; desc: string; action?: React.ReactNode }) => (
   <div className="empty-state">
     <div className="empty-icon">
@@ -221,7 +225,7 @@ export default function Home() {
       }
     } catch (e) {
       console.error(e);
-      showToast("Gagal memuat data dari blockchain", "error");
+      showToast("Failed to load data from the blockchain", "error");
     } finally {
       setLoadingProfile(false);
       setLoadingCerts(false);
@@ -249,7 +253,7 @@ export default function Home() {
   // Profile Form validation
   const validateProfile = () => {
     const errs: Record<string, string> = {};
-    if (!profName.trim()) errs.name = "Nama lengkap wajib diisi";
+    if (!profName.trim()) errs.name = "Full name is required";
     setProfErrors(errs);
     return Object.keys(errs).length === 0;
   };
@@ -267,14 +271,14 @@ export default function Home() {
       };
 
       const response = await signAndSubmitTransaction(transaction);
-      showToast("Menunggu konfirmasi transaksi...", "info");
+      showToast("Waiting for transaction confirmation...", "info");
       await aptos.waitForTransaction({ transactionHash: response.hash });
-      showToast("Profil berhasil disimpan on-chain!", "success");
+      showToast("Profile saved on-chain successfully!", "success");
       await fetchUserData(account.address);
       setView("dashboard");
     } catch (error: any) {
       console.error(error);
-      showToast(error.message || "Gagal menyimpan profil", "error");
+      showToast(error.message || "Failed to save profile", "error");
     } finally {
       setSubmitting(false);
     }
@@ -293,14 +297,14 @@ export default function Home() {
       };
 
       const response = await signAndSubmitTransaction(transaction);
-      showToast("Menunggu konfirmasi transaksi...", "info");
+      showToast("Waiting for transaction confirmation...", "info");
       await aptos.waitForTransaction({ transactionHash: response.hash });
-      showToast("Profil berhasil diperbarui!", "success");
+      showToast("Profile updated successfully!", "success");
       await fetchUserData(account.address);
       setView("dashboard");
     } catch (error: any) {
       console.error(error);
-      showToast(error.message || "Gagal memperbarui profil", "error");
+      showToast(error.message || "Failed to update profile", "error");
     } finally {
       setSubmitting(false);
     }
@@ -309,7 +313,7 @@ export default function Home() {
   // Organization validation
   const validateOrg = () => {
     const errs: Record<string, string> = {};
-    if (!orgName.trim()) errs.name = "Nama organisasi wajib diisi";
+    if (!orgName.trim()) errs.name = "Organization name is required";
     setOrgErrors(errs);
     return Object.keys(errs).length === 0;
   };
@@ -327,14 +331,14 @@ export default function Home() {
       };
 
       const response = await signAndSubmitTransaction(transaction);
-      showToast("Mendaftarkan organisasi on-chain...", "info");
+      showToast("Registering organization on-chain...", "info");
       await aptos.waitForTransaction({ transactionHash: response.hash });
-      showToast("Organisasi berhasil didaftarkan!", "success");
+      showToast("Organization registered successfully!", "success");
       await fetchUserData(account.address);
       setView("org-dashboard");
     } catch (error: any) {
       console.error(error);
-      showToast(error.message || "Gagal mendaftarkan organisasi", "error");
+      showToast(error.message || "Failed to register organization", "error");
     } finally {
       setSubmitting(false);
     }
@@ -353,16 +357,16 @@ export default function Home() {
       };
 
       const response = await signAndSubmitTransaction(transaction);
-      showToast("Membuat campaign baru...", "info");
+      showToast("Creating new campaign...", "info");
       await aptos.waitForTransaction({ transactionHash: response.hash });
-      showToast("Campaign berhasil dibuat!", "success");
+      showToast("Campaign created successfully!", "success");
       setCampName("");
       setCampDesc("");
       setShowCreateCamp(false);
       await fetchUserData(account.address);
     } catch (error: any) {
       console.error(error);
-      showToast(error.message || "Gagal membuat campaign", "error");
+      showToast(error.message || "Failed to create campaign", "error");
     } finally {
       setSubmitting(false);
     }
@@ -376,24 +380,24 @@ export default function Home() {
       .filter(Boolean);
 
     if (addresses.length === 0) {
-      showToast("Masukkan setidaknya satu alamat wallet penerima", "error");
+      showToast("Please enter at least one recipient wallet address", "error");
       return;
     }
 
     // Address verification
     const invalidAddrs = addresses.filter((addr) => !addr.startsWith("0x") || addr.length < 50);
     if (invalidAddrs.length > 0) {
-      showToast(`Alamat tidak valid: ${invalidAddrs[0].slice(0, 10)}...`, "error");
+      showToast(`Invalid address: ${invalidAddrs[0].slice(0, 10)}...`, "error");
       return;
     }
 
     setSubmitting(true);
-    showToast("Mengunggah metadata JSON ke Shelby Protocol...", "info");
+    showToast("Uploading JSON metadata to Shelby Protocol...", "info");
 
     try {
       // 1. Build metadata objects & upload to Shelby
       const activeCamp = campaigns.find((c) => c.id === campId);
-      if (!activeCamp) throw new Error("Campaign tidak ditemukan");
+      if (!activeCamp) throw new Error("Campaign not found");
 
       const blobs = await Promise.all(
         addresses.map(async (addr) => {
@@ -424,7 +428,7 @@ export default function Home() {
         expirationMicros: Date.now() * 1000 + 5 * 365 * 24 * 60 * 60 * 1000000,
       });
 
-      showToast("Metadata berhasil diunggah ke Shelby. Memulai pencetakan SBT...", "info");
+      showToast("Metadata uploaded to Shelby. Minting SBT...", "info");
 
       // Generate blobUrls
       const blobUrls = addresses.map((addr) => {
@@ -441,15 +445,15 @@ export default function Home() {
       };
 
       const response = await signAndSubmitTransaction(transaction);
-      showToast("Memproses transaksi pencetakan SBT...", "info");
+      showToast("Processing SBT minting transaction...", "info");
       await aptos.waitForTransaction({ transactionHash: response.hash });
-      showToast(`Sertifikat berhasil diterbitkan ke ${addresses.length} alamat!`, "success");
+      showToast(`Certificates issued successfully to ${addresses.length} addresses!`, "success");
       setIssueAddrs("");
       setActiveCampId(null);
       await fetchUserData(account?.address || "");
     } catch (error: any) {
       console.error(error);
-      showToast(error.message || "Gagal menerbitkan sertifikat", "error");
+      showToast(error.message || "Failed to issue certificates", "error");
     } finally {
       setSubmitting(false);
     }
@@ -459,9 +463,9 @@ export default function Home() {
   const handleDisconnect = async () => {
     try {
       await disconnect();
-      showToast("Wallet terputus", "info");
+      showToast("Wallet disconnected", "info");
     } catch (e) {
-      showToast("Gagal memutuskan wallet", "error");
+      showToast("Failed to disconnect wallet", "error");
     }
   };
 
@@ -491,7 +495,7 @@ export default function Home() {
               fontFamily: "inherit",
             }}
           >
-            <Icon n="arrow-left" size={16} /> Kembali ke portfolio
+            <Icon n="arrow-left" size={16} /> Back to portfolio
           </button>
           <div className="cert-visual" style={{ marginBottom: "16px" }}>
             <div
@@ -511,13 +515,13 @@ export default function Home() {
               <Icon n="certificate" size={28} style={{ color: "#fff" }} />
             </div>
             <div style={{ fontWeight: 600, fontSize: "18px", color: "var(--color-primary)", marginBottom: "4px", position: "relative", zIndex: 1 }}>
-              Sertifikat Kelulusan
+              Certificate of Completion
             </div>
             <div style={{ fontSize: "13px", color: "var(--color-teal)", marginBottom: "10px", position: "relative", zIndex: 1 }}>
-              <Icon n="building" size={13} /> {organization?.name || "Organisasi Terverifikasi"}
+              <Icon n="building" size={13} /> {organization?.name || "Verified Organization"}
             </div>
             <div style={{ display: "flex", justifyContent: "center", gap: "8px", position: "relative", zIndex: 1 }}>
-              <Badge color="teal" icon="shield-check">Terverifikasi On-chain</Badge>
+              <Badge color="teal" icon="shield-check">Verified On-chain</Badge>
               <Badge color="purple" icon="link">SBT Non-transferable</Badge>
             </div>
           </div>
@@ -525,7 +529,7 @@ export default function Home() {
           <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "12px", marginBottom: "16px" }}>
             <Card style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "20px" }}>
               <p style={{ fontSize: "12px", fontWeight: 600, color: "var(--color-text-secondary)", marginBottom: "12px", textTransform: "uppercase" }}>
-                Scan QR Code untuk Verifikasi
+                Scan QR Code to Verify
               </p>
               {verifyUrl && (
                 <img
@@ -535,7 +539,7 @@ export default function Home() {
                 />
               )}
               <p style={{ fontSize: "11px", color: "var(--color-text-secondary)", marginTop: "12px", textAlign: "center" }}>
-                QR code ini merujuk ke halaman verifikasi publik on-chain CertChain
+                This QR code references the CertChain Hub dApp public on-chain verification page.
               </p>
             </Card>
           </div>
@@ -543,14 +547,14 @@ export default function Home() {
           <Card>
             {[
               ["Credential ID", `CERT-${String(selectedCert.id).padStart(6, "0")}`, "mono", "id"],
-              ["Tanggal Terbit", new Date(parseInt(selectedCert.issued_at) * 1000).toLocaleDateString("id-ID", {
+              ["Issue Date", new Date(parseInt(selectedCert.issued_at) * 1000).toLocaleDateString("en-US", {
                 weekday: "long",
                 year: "numeric",
                 month: "long",
                 day: "numeric",
               }), "text", "calendar"],
-              ["Penerbit", organization?.name || "Organisasi", "text", "building"],
-              ["Alamat Penerbit", selectedCert.issuer.slice(0, 10) + "..." + selectedCert.issuer.slice(-8), "mono", "wallet"],
+              ["Issuer", organization?.name || "Organization", "text", "building"],
+              ["Issuer Address", selectedCert.issuer.slice(0, 10) + "..." + selectedCert.issuer.slice(-8), "mono", "wallet"],
               ["Blob URL (Shelby)", selectedCert.blob_url, "mono", "cloud"],
             ].map(([k, v, type, icon]) => (
               <div
@@ -597,10 +601,10 @@ export default function Home() {
                 size="sm"
                 onClick={() => {
                   navigator.clipboard.writeText(`CERT-${String(selectedCert.id).padStart(6, "0")}`);
-                  showToast("Credential ID disalin ke clipboard", "success");
+                  showToast("Credential ID copied to clipboard", "success");
                 }}
               >
-                <Icon n="copy" size={14} /> Salin ID
+                <Icon n="copy" size={14} /> Copy ID
               </Btn>
             </div>
           </Card>
@@ -627,10 +631,10 @@ export default function Home() {
               >
                 <Icon n="link" size={30} style={{ color: "var(--color-primary)" }} />
               </div>
-              <h2 style={{ fontSize: "20px", fontWeight: 600, marginBottom: "6px" }}>Hubungkan Wallet</h2>
+              <h2 style={{ fontSize: "20px", fontWeight: 600, marginBottom: "6px" }}>Connect Wallet</h2>
               <p style={{ fontSize: "14px", color: "var(--color-text-secondary)", lineHeight: 1.6 }}>
-                CertChain Hub berjalan di Shelby Network.<br />
-                Hubungkan wallet Shelby/Aptos Anda untuk melanjutkan.
+                CertChain Hub dApp runs on Shelby Network.<br />
+                Connect your Shelby/Aptos wallet to continue.
               </p>
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: "10px", maxWidth: "340px", margin: "0 auto" }}>
@@ -705,9 +709,9 @@ export default function Home() {
                 <Icon n="user-circle" size={22} style={{ color: "var(--color-primary)" }} />
               </div>
               <div>
-                <h2 style={{ fontSize: "18px", fontWeight: 600 }}>{isEdit ? "Perbarui Profil" : "Buat Profil Baru"}</h2>
+                <h2 style={{ fontSize: "18px", fontWeight: 600 }}>{isEdit ? "Update Profile" : "Create New Profile"}</h2>
                 <p style={{ fontSize: "13px", color: "var(--color-text-secondary)" }}>
-                  Identitas on-chain portofolio Anda di Shelby Network
+                  Your on-chain portfolio identity on Shelby Network
                 </p>
               </div>
             </div>
@@ -730,18 +734,18 @@ export default function Home() {
                 </code>
               </div>
               <Fld
-                label="Nama Lengkap"
+                label="Full Name"
                 value={profName}
                 onChange={setProfName}
-                placeholder="misal: Alice Chen"
+                placeholder="e.g., Alice Chen"
                 req={true}
                 error={profErrors.name}
               />
               <Fld
-                label="Bio Singkat"
+                label="Short Bio"
                 value={profBio}
                 onChange={setProfBio}
-                placeholder="misal: Web3 Developer & Smart Contract Builder"
+                placeholder="e.g., Web3 Developer & Smart Contract Builder"
                 multi={true}
               />
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
@@ -774,11 +778,11 @@ export default function Home() {
                 >
                   {submitting ? (
                     <>
-                      <Spinner /> Menyimpan ke Blockchain...
+                      <Spinner /> Saving to Blockchain...
                     </>
                   ) : (
                     <>
-                      <Icon n="check" size={16} /> {isEdit ? "Simpan Perubahan" : "Buat Profil"}
+                      <Icon n="check" size={16} /> {isEdit ? "Save Changes" : "Create Profile"}
                     </>
                   )}
                 </Btn>
@@ -796,11 +800,11 @@ export default function Home() {
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontWeight: 600, fontSize: "16px", marginBottom: "3px" }}>{profile?.name}</div>
                 <div style={{ fontSize: "13px", color: "var(--color-text-secondary)", marginBottom: "8px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                  {profile?.bio || "Belum ada bio"}
+                  {profile?.bio || "No bio registered"}
                 </div>
                 <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
                   <Badge color="teal" icon="certificate">
-                    {certificates.length} Sertifikat
+                    {certificates.length} Certificates
                   </Badge>
                   {organization && <Badge color="purple" icon="building">Owner Org</Badge>}
                 </div>
@@ -812,8 +816,8 @@ export default function Home() {
 
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "10px", marginBottom: "20px" }}>
               {[
-                ["Sertifikat", certificates.length, "certificate", "purple"],
-                ["Organisasi", organization ? 1 : 0, "building", "teal"],
+                ["Certificates", certificates.length, "certificate", "purple"],
+                ["Organizations", organization ? 1 : 0, "building", "teal"],
                 ["Campaigns", campaigns.length, "target", "coral"],
               ].map(([label, val, icon, color]) => (
                 <div key={label as string} className="stat-card">
@@ -854,7 +858,7 @@ export default function Home() {
             </div>
 
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
-              <div className="section-title" style={{ margin: 0 }}>Sertifikat Saya</div>
+              <div className="section-title" style={{ margin: 0 }}>My Certificates</div>
               <Badge color="teal">{certificates.length} Total</Badge>
             </div>
 
@@ -863,8 +867,8 @@ export default function Home() {
             ) : certificates.length === 0 ? (
               <Empty
                 icon="inbox"
-                title="Belum ada sertifikat"
-                desc="Organisasi penerbit akan mengirimkan sertifikat Soulbound langsung ke alamat dompet Anda."
+                title="No certificates yet"
+                desc="Issuing organizations will send Soulbound certificates directly to your wallet address."
               />
             ) : (
               <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
@@ -886,7 +890,7 @@ export default function Home() {
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ fontWeight: 600, fontSize: "14px", marginBottom: "3px", color: "var(--color-text-primary)" }}>
-                        Sertifikat Kelulusan #{cert.id}
+                        Certificate of Completion #{cert.id}
                       </div>
                       <div style={{ display: "flex", alignItems: "center", gap: "5px", fontSize: "12px", color: "var(--color-text-secondary)", marginBottom: "8px" }}>
                         <Icon n="building" size={13} /> Issuer: {cert.issuer.slice(0, 8) + "..." + cert.issuer.slice(-4)}
@@ -898,7 +902,7 @@ export default function Home() {
                     </div>
                     <div style={{ flexShrink: 0, textAlign: "right" }}>
                       <div style={{ fontSize: "11px", color: "var(--color-text-secondary)", marginBottom: "4px" }}>
-                        {new Date(parseInt(cert.issued_at) * 1000).toLocaleDateString()}
+                        {new Date(parseInt(cert.issued_at) * 1000).toLocaleDateString("en-US")}
                       </div>
                       <Icon n="chevron-right" size={15} style={{ color: "var(--color-text-secondary)" }} />
                     </div>
@@ -926,14 +930,14 @@ export default function Home() {
                   </div>
                   <div style={{ flex: 1 }}>
                     <div style={{ fontWeight: 600, fontSize: "14px", color: "var(--color-primary)", marginBottom: "3px" }}>
-                      Menerbitkan sertifikat?
+                      Issuing certificates?
                     </div>
                     <div style={{ fontSize: "13px", color: "var(--color-primary)" }}>
-                      Buat organisasi untuk mulai menerbitkan sertifikat.
+                      Create an organization to start issuing credentials.
                     </div>
                   </div>
                   <Btn cls="btn-primary" size="sm" onClick={() => setView("create-org")}>
-                    <Icon n="arrow-right" size={14} /> Buat
+                    <Icon n="arrow-right" size={14} /> Create
                   </Btn>
                 </div>
               </Card>
@@ -949,7 +953,7 @@ export default function Home() {
                   <Av name={organization.name} size={40} color="teal" />
                   <div style={{ flex: 1 }}>
                     <div style={{ fontSize: "12px", color: "var(--color-teal)", fontWeight: 600, marginBottom: "2px" }}>
-                      Organisasi Anda
+                      Your Organization
                     </div>
                     <div style={{ fontWeight: 600 }}>{organization.name}</div>
                   </div>
@@ -978,26 +982,26 @@ export default function Home() {
                 <Icon n="building" size={22} style={{ color: "var(--color-teal)" }} />
               </div>
               <div>
-                <h2 style={{ fontSize: "18px", fontWeight: 600 }}>Buat Organisasi</h2>
+                <h2 style={{ fontSize: "18px", fontWeight: 600 }}>Create Organization</h2>
                 <p style={{ fontSize: "13px", color: "var(--color-text-secondary)" }}>
-                  Terbitkan sertifikat portofolio digital di Shelby Network
+                  Issue digital portfolio certificates on Shelby Network
                 </p>
               </div>
             </div>
             <Card>
               <Fld
-                label="Nama Organisasi"
+                label="Organization Name"
                 value={orgName}
                 onChange={setOrgName}
-                placeholder="misal: Shelby Indonesia Academy"
+                placeholder="e.g., Shelby Indonesia Academy"
                 req={true}
                 error={orgErrors.name}
               />
               <Fld
-                label="Deskripsi"
+                label="Description"
                 value={orgDesc}
                 onChange={setOrgDesc}
-                placeholder="Kami menyelenggarakan bootcamp Web3 dan sertifikasi developer"
+                placeholder="We organize Web3 bootcamps and developer certifications"
                 multi={true}
               />
               <Fld
@@ -1007,16 +1011,16 @@ export default function Home() {
                 placeholder="https://example.com"
               />
               <InfoBox cls="amber" icon="info-circle">
-                Alur Produksi: metadata JSON → Unggah ke Shelby storage → hash komitmen disimpan di Shelby Network via SBT smart contract.
+                Production Flow: metadata JSON → Upload to Shelby storage → commitment hash saved on Shelby Network via SBT smart contract.
               </InfoBox>
               <Btn onClick={handleCreateOrg} disabled={submitting || !orgName.trim()} full={true}>
                 {submitting ? (
                   <>
-                    <Spinner /> Mengunggah ke Shelby Network...
+                    <Spinner /> Uploading to Shelby Network...
                   </>
                 ) : (
                   <>
-                    <Icon n="cloud-upload" size={16} /> Daftarkan Organisasi
+                    <Icon n="cloud-upload" size={16} /> Register Organization
                   </>
                 )}
               </Btn>
@@ -1030,11 +1034,11 @@ export default function Home() {
             <div className="fade-in" style={{ padding: "20px" }}>
               <Empty
                 icon="building"
-                title="Belum ada organisasi"
-                desc="Anda belum mendaftarkan organisasi. Silakan buat organisasi untuk mulai menerbitkan sertifikat."
+                title="No organization found"
+                desc="You have not registered an organization. Please create an organization to start issuing certificates."
                 action={
                   <Btn onClick={() => setView("create-org")}>
-                    <Icon n="plus" size={16} /> Buat Organisasi
+                    <Icon n="plus" size={16} /> Create Organization
                   </Btn>
                 }
               />
@@ -1049,7 +1053,7 @@ export default function Home() {
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontWeight: 600, fontSize: "15px", marginBottom: "2px" }}>{organization.name}</div>
                 <div style={{ fontSize: "13px", color: "var(--color-text-secondary)", marginBottom: "6px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                  {organization.desc || "Belum ada deskripsi"}
+                  {organization.desc || "No description registered"}
                 </div>
                 <div style={{ display: "flex", gap: "6px" }}>
                   <Badge color="teal" icon="target">{campaigns.length} Campaign</Badge>
@@ -1063,44 +1067,44 @@ export default function Home() {
             </Card>
 
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
-              <div className="section-title" style={{ margin: 0 }}>Daftar Campaign</div>
+              <div className="section-title" style={{ margin: 0 }}>Campaign List</div>
               <Btn cls="btn-primary" size="sm" onClick={() => setShowCreateCamp(true)}>
-                <Icon n="plus" size={14} /> Campaign Baru
+                <Icon n="plus" size={14} /> New Campaign
               </Btn>
             </div>
 
             {showCreateCamp && (
               <Card style={{ marginBottom: "12px", border: "1px solid var(--color-primary-border)", background: "var(--color-primary-light)" }}>
                 <div style={{ fontWeight: 600, fontSize: "14px", marginBottom: "12px", color: "var(--color-primary)", display: "flex", alignItems: "center", gap: "8px" }}>
-                  <Icon n="target" size={16} /> Campaign Baru
+                  <Icon n="target" size={16} /> New Campaign
                 </div>
                 <Fld
-                  label="Nama Campaign"
+                  label="Campaign Name"
                   value={campName}
                   onChange={setCampName}
-                  placeholder="misal: Web3 Bootcamp Batch 1"
+                  placeholder="e.g., Web3 Bootcamp Batch 1"
                   req={true}
                 />
                 <Fld
-                  label="Deskripsi"
+                  label="Description"
                   value={campDesc}
                   onChange={setCampDesc}
-                  placeholder="misal: 6 minggu intensif belajar Aptos smart contract"
+                  placeholder="e.g., 6 weeks of intensive Smart Contract training"
                   multi={true}
                 />
                 <div style={{ display: "flex", gap: "8px" }}>
                   <Btn onClick={handleCreateCampaign} disabled={submitting || !campName.trim()}>
-                    {submitting ? <Spinner /> : <><Icon n="check" size={14} /> Buat</>}
+                    {submitting ? <Spinner /> : <><Icon n="check" size={14} /> Create</>}
                   </Btn>
                   <Btn cls="btn-ghost" onClick={() => setShowCreateCamp(false)}>
-                    <Icon n="x" size={14} /> Batal
+                    <Icon n="x" size={14} /> Cancel
                   </Btn>
                 </div>
               </Card>
             )}
 
             {campaigns.length === 0 && !showCreateCamp ? (
-              <Empty icon="target" title="Belum ada campaign" desc="Buat campaign baru untuk mengelompokkan penerbitan sertifikat." />
+              <Empty icon="target" title="No campaigns yet" desc="Create a new campaign to organize certificate issuance." />
             ) : (
               <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                 {campaigns.map((camp) => {
@@ -1114,31 +1118,31 @@ export default function Home() {
                         <div style={{ flex: 1, minWidth: 0, marginRight: "12px" }}>
                           <div style={{ fontWeight: 600, fontSize: "14px", marginBottom: "3px" }}>{camp.name}</div>
                           <div style={{ fontSize: "12px", color: "var(--color-text-secondary)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                            {camp.desc || "Belum ada deskripsi"}
+                            {camp.desc || "No description registered"}
                           </div>
                         </div>
                         <div style={{ display: "flex", flexDirection: "column", gap: "4px", alignItems: "flex-end", flexShrink: 0 }}>
                           <Badge color="purple" icon="hash">{camp.id}</Badge>
                           <div style={{ display: "flex", alignItems: "center", gap: "4px", fontSize: "11px", color: "var(--color-text-secondary)", marginTop: "2px" }}>
                             <Icon n={isOpen ? "chevron-up" : "chevron-down"} size={13} />
-                            {isOpen ? "Tutup" : "Terbitkan"}
+                            {isOpen ? "Close" : "Issue"}
                           </div>
                         </div>
                       </div>
 
                       {isOpen && (
                         <div style={{ marginTop: "14px", paddingTop: "14px", borderTop: "1px solid var(--color-border-tertiary)" }}>
-                          <div className="section-title">Terbitkan Sertifikat</div>
+                          <div className="section-title">Issue Certificates</div>
                           <Fld
-                            label="Alamat Wallet Penerima"
+                            label="Recipient Wallet Address"
                             value={issueAddrs}
                             onChange={setIssueAddrs}
-                            placeholder="0xabc123...&#10;0xdef456...&#10;(satu alamat per baris atau pisahkan dengan koma)"
+                            placeholder="0xabc123...&#10;0xdef456...&#10;(one address per line or comma-separated)"
                             multi={true}
                             req={true}
                           />
                           <InfoBox cls="teal" icon="route">
-                            Sertifikat akan diunggah ke Shelby Storage (desentralisasi) kemudian dicetak sebagai Soulbound Token (SBT) non-transferable di Shelby Network.
+                            Certificates will be uploaded to Shelby Storage (decentralized) and minted as non-transferable Soulbound Tokens (SBT) on Shelby Network.
                           </InfoBox>
                           <Btn
                             cls="btn-teal"
@@ -1147,11 +1151,11 @@ export default function Home() {
                           >
                             {submitting ? (
                               <>
-                                <Spinner /> Memproses...
+                                <Spinner /> Processing...
                               </>
                             ) : (
                               <>
-                                <Icon n="send" size={15} /> Terbitkan ke Penerima
+                                <Icon n="send" size={15} /> Issue to Recipients
                               </>
                             )}
                           </Btn>
@@ -1169,13 +1173,13 @@ export default function Home() {
         // Simulated explore organizations and campaigns to make layout look rich
         const mockOrgs = [
           { addr: MODULE_ADDRESS, name: organization?.name || "Shelby Indonesia Academy", desc: organization?.desc || "Web3 Bootcamp provider", verified: true, count: campaigns.length },
-          { addr: "0x1111111111111111111111111111111111111111111111111111111111111111", name: "Aptos Labs Indonesia", desc: "Komunitas Pengembang Aptos Lokal", verified: true, count: 2 },
+          { addr: "0x1111111111111111111111111111111111111111111111111111111111111111", name: "Aptos Labs Indonesia", desc: "Local Aptos Developer Community", verified: true, count: 2 },
           { addr: "0x2222222222222222222222222222222222222222222222222222222222222222", name: "Pontem Foundation", desc: "Aptos ecosystem dApp developer", verified: false, count: 1 },
         ];
 
         return (
           <div className="fade-in" style={{ padding: "0 20px 20px" }}>
-            <div className="section-title">Eksplorasi Organisasi Terdaftar</div>
+            <div className="section-title">Explore Registered Organizations</div>
             <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
               {mockOrgs.map((o) => (
                 <Card key={o.addr}>
@@ -1230,7 +1234,7 @@ export default function Home() {
           >
             <Icon n="certificate" size={17} style={{ color: "#fff" }} />
           </div>
-          <span style={{ fontWeight: 600, fontSize: "15px" }}>CertChain</span>
+          <span style={{ fontWeight: 600, fontSize: "15px" }}>CertChain Hub dApp</span>
           <Badge color="amber" icon="test-pipe">Shelby Testnet</Badge>
         </div>
 
@@ -1275,8 +1279,8 @@ export default function Home() {
         <div className="nav-bar">
           {[
             { id: "dashboard", label: "Portfolio", icon: "layout-dashboard" },
-            { id: "org-dashboard", label: "Organisasi", icon: "building" },
-            { id: "explore", label: "Eksplorasi", icon: "compass" },
+            { id: "org-dashboard", label: "Organization", icon: "building" },
+            { id: "explore", label: "Explore", icon: "compass" },
           ].map(({ id, label, icon }) => (
             <button
               key={id}
@@ -1293,5 +1297,20 @@ export default function Home() {
         </div>
       )}
     </div>
+  );
+}
+
+// Spinner component for loading buttons
+function Spinner() {
+  return (
+    <span
+      className="spinner"
+      style={{
+        width: "12px",
+        height: "12px",
+        borderWidth: "1.5px",
+        marginRight: "6px",
+      }}
+    />
   );
 }

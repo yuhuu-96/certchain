@@ -57,7 +57,7 @@ function VerificationContent() {
       const found = certs.find((c) => c.id === idStr);
 
       if (!found) {
-        setError("Sertifikat tidak ditemukan. Periksa alamat wallet dan ID sertifikat.");
+        setError("Certificate not found. Please check the wallet address and certificate ID.");
         setLoading(false);
         return;
       }
@@ -69,7 +69,7 @@ function VerificationContent() {
       setMetadata(meta);
     } catch (e: any) {
       console.error(e);
-      setError("Gagal memproses verifikasi blockchain.");
+      setError("Failed to process blockchain verification.");
     } finally {
       setLoading(false);
     }
@@ -114,7 +114,7 @@ function VerificationContent() {
           >
             <Icon n="certificate" size={17} style={{ color: "#fff" }} />
           </div>
-          <span style={{ fontWeight: 600, fontSize: "15px" }}>CertChain Verification</span>
+          <span style={{ fontWeight: 600, fontSize: "15px" }}>CertChain Hub dApp Verification</span>
         </div>
         <Badge color="green" icon="shield-check">Secure</Badge>
       </div>
@@ -125,12 +125,12 @@ function VerificationContent() {
           <Card style={{ marginBottom: "20px" }}>
             <h2 style={{ fontSize: "16px", fontWeight: 600, marginBottom: "12px", display: "flex", alignItems: "center", gap: "6px" }}>
               <Icon n="search" size={18} style={{ color: "var(--color-primary)" }} />
-              Verifikasi Kredensial On-chain
+              On-chain Credential Verification
             </h2>
             <form onSubmit={handleManualSubmit}>
               <div style={{ marginBottom: "12px" }}>
                 <label style={{ fontSize: "12px", color: "var(--color-text-secondary)", marginBottom: "4px", display: "block" }}>
-                  Alamat Wallet Penerima
+                  Recipient Wallet Address
                 </label>
                 <input
                   type="text"
@@ -142,18 +142,18 @@ function VerificationContent() {
               </div>
               <div style={{ marginBottom: "16px" }}>
                 <label style={{ fontSize: "12px", color: "var(--color-text-secondary)", marginBottom: "4px", display: "block" }}>
-                  ID Sertifikat (Angka)
+                  Certificate ID (Numeric)
                 </label>
                 <input
                   type="text"
-                  placeholder="misal: 1"
+                  placeholder="e.g., 1"
                   value={inputId}
                   onChange={(e) => setInputId(e.target.value)}
                   required
                 />
               </div>
               <button type="submit" className="btn btn-primary btn-full">
-                Periksa Kredensial
+                Verify Credential
               </button>
             </form>
           </Card>
@@ -163,7 +163,7 @@ function VerificationContent() {
           <div style={{ textAlign: "center", padding: "40px" }}>
             <span className="spinner spinner-dark" style={{ width: "30px", height: "30px", borderWidth: "3px" }} />
             <p style={{ marginTop: "14px", fontSize: "14px", color: "var(--color-text-secondary)" }}>
-              Melakukan verifikasi kriptografis di Shelby Testnet...
+              Performing cryptographic verification on Shelby Testnet...
             </p>
           </div>
         )}
@@ -171,7 +171,7 @@ function VerificationContent() {
         {error && (
           <Card style={{ borderLeft: "4px solid var(--color-red)", background: "var(--color-red-light)" }}>
             <div style={{ display: "flex", gap: "8px", alignItems: "center", color: "var(--color-red)", fontWeight: 600, fontSize: "14px" }}>
-              <Icon n="circle-x" size={16} /> Verifikasi Gagal
+              <Icon n="circle-x" size={16} /> Verification Failed
             </div>
             <p style={{ fontSize: "13px", color: "var(--color-text-primary)", marginTop: "6px" }}>{error}</p>
           </Card>
@@ -195,25 +195,25 @@ function VerificationContent() {
                 <Icon n="shield-check" size={24} style={{ color: "#fff" }} />
               </div>
               <h2 style={{ fontSize: "18px", fontWeight: 600, color: "var(--color-teal)", marginBottom: "4px" }}>
-                Kredensial Asli & Terverifikasi
+                Authentic & Verified Credential
               </h2>
               <p style={{ fontSize: "12px", color: "var(--color-teal)", fontWeight: 500 }}>
-                Catatan ini ditemukan di Shelby Blockchain & Shelby Storage
+                Record found on Shelby Blockchain & Shelby Storage
               </p>
             </Card>
 
             <Card style={{ marginBottom: "16px" }}>
-              <h3 className="section-title">Detail Sertifikat</h3>
+              <h3 className="section-title">Certificate Details</h3>
               {[
                 ["Credential ID", `CERT-${String(cert.id).padStart(6, "0")}`, "mono"],
-                ["Penerima (On-chain)", recipient?.name || "Pemilik Wallet", "text"],
-                ["Wallet Penerima", urlAddress.slice(0, 12) + "..." + urlAddress.slice(-8), "mono"],
-                ["Tanggal Terbit", new Date(parseInt(cert.issued_at) * 1000).toLocaleDateString("id-ID", {
+                ["Recipient (On-chain)", recipient?.name || "Wallet Owner", "text"],
+                ["Recipient Wallet", urlAddress.slice(0, 12) + "..." + urlAddress.slice(-8), "mono"],
+                ["Issue Date", new Date(parseInt(cert.issued_at) * 1000).toLocaleDateString("en-US", {
                   year: "numeric",
                   month: "long",
                   day: "numeric",
                 }), "text"],
-                ["Issuer (Penerbit)", cert.issuer.slice(0, 12) + "..." + cert.issuer.slice(-8), "mono"],
+                ["Issuer", cert.issuer.slice(0, 12) + "..." + cert.issuer.slice(-8), "mono"],
               ].map(([k, v, type]) => (
                 <div
                   key={k}
@@ -242,11 +242,11 @@ function VerificationContent() {
 
             {metadata && (
               <Card style={{ marginBottom: "16px" }}>
-                <h3 className="section-title">Metadata Terenkripsi (Shelby Blob)</h3>
+                <h3 className="section-title">Decrypted Metadata (Shelby Blob)</h3>
                 {[
-                  ["Nama Program / Event", metadata.campaignName || "N/A"],
-                  ["Deskripsi Program", metadata.campaignDescription || "N/A"],
-                  ["Nama Penerbit", metadata.organizationName || "N/A"],
+                  ["Program / Event Name", metadata.campaignName || "N/A"],
+                  ["Program Description", metadata.campaignDescription || "N/A"],
+                  ["Issuer Name", metadata.organizationName || "N/A"],
                   ["Decentralized Storage URI", cert.blob_url],
                 ].map(([k, v]) => (
                   <div key={k} style={{ marginBottom: "12px" }}>
@@ -266,7 +266,7 @@ function VerificationContent() {
                 className="btn btn-teal btn-full"
                 onClick={() => window.open(`https://explorer.aptoslabs.com/account/${urlAddress}/resources?network=testnet`, "_blank")}
               >
-                <Icon n="external-link" size={14} /> Lihat Transaksi di Explorer
+                <Icon n="external-link" size={14} /> View Transaction on Explorer
               </button>
               <button
                 className="btn btn-ghost"
@@ -287,7 +287,7 @@ export default function VerificationPage() {
     <Suspense fallback={
       <div className="app-container" style={{ padding: "40px", textAlign: "center" }}>
         <span className="spinner spinner-dark" />
-        <p style={{ marginTop: "12px", color: "var(--color-text-secondary)" }}>Memuat sistem verifikasi...</p>
+        <p style={{ marginTop: "12px", color: "var(--color-text-secondary)" }}>Loading verification system...</p>
       </div>
     }>
       <VerificationContent />
