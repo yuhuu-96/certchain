@@ -433,7 +433,7 @@ export default function Home() {
       // Generate blobUrls
       const blobUrls = addresses.map((addr) => {
         const blobName = `cert-${campId}-${addr.toLowerCase()}.json`;
-        return `https://api.testnet.shelby.xyz/shelby/v1/blobs/${account?.address}/${blobName}`;
+        return `https://api.shelbynet.shelby.xyz/v1/blobs/${account?.address}/${blobName}`;
       });
 
       // 2. Call Aptos Move Contract to mint SBT
@@ -684,7 +684,7 @@ export default function Home() {
               })}
             </div>
             <p style={{ fontSize: "11px", color: "var(--color-text-secondary)", textAlign: "center", marginTop: "24px" }}>
-              @shelby-protocol/react · @aptos-labs/wallet-adapter-react · Testnet
+              @shelby-protocol/react · @aptos-labs/wallet-adapter-react · Shelbynet
             </p>
           </div>
         );
@@ -1235,7 +1235,7 @@ export default function Home() {
             <Icon n="certificate" size={17} style={{ color: "#fff" }} />
           </div>
           <span style={{ fontWeight: 600, fontSize: "15px" }}>CertChain</span>
-          <Badge color="amber" icon="test-pipe">Shelby Testnet</Badge>
+          <Badge color="amber" icon="test-pipe">Shelbynet</Badge>
         </div>
 
         {connected && account && (

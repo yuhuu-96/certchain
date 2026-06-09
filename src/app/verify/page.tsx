@@ -163,7 +163,7 @@ function VerificationContent() {
           <div style={{ textAlign: "center", padding: "40px" }}>
             <span className="spinner spinner-dark" style={{ width: "30px", height: "30px", borderWidth: "3px" }} />
             <p style={{ marginTop: "14px", fontSize: "14px", color: "var(--color-text-secondary)" }}>
-              Performing cryptographic verification on Shelby Testnet...
+              Performing cryptographic verification on Shelbynet...
             </p>
           </div>
         )}
