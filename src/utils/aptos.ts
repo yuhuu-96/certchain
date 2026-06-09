@@ -4,9 +4,9 @@ import { Aptos, AptosConfig, Network } from "@aptos-labs/ts-sdk";
 // Developers can overwrite this using the NEXT_PUBLIC_MODULE_ADDRESS environment variable.
 export const MODULE_ADDRESS = 
   process.env.NEXT_PUBLIC_MODULE_ADDRESS || 
-  "0x8c74e46ae503ea848458f6286db8ad4c35fb46cbdc4026026f3299723528b9d88";
+  "0x8c74e46ae503ea848458f6286db8ad4c35fb46cbdc4026026f3299723528b9d8";
 
-const config = new AptosConfig({ network: Network.TESTNET });
+const config = new AptosConfig({ network: Network.SHELBYNET });
 export const aptos = new Aptos(config);
 
 export interface OnChainProfile {

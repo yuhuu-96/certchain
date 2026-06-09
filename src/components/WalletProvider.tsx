@@ -19,7 +19,7 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
   }), []);
 
   const shelbyClient = useMemo(() => {
-    return new ShelbyClient({ network: Network.TESTNET });
+    return new ShelbyClient({ network: Network.SHELBYNET });
   }, []);
 
   return (
@@ -27,7 +27,7 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
       <AptosWalletAdapterProvider
         autoConnect={true}
         dappConfig={{
-          network: Network.TESTNET,
+          network: Network.SHELBYNET,
         }}
         onError={(err) => {
           console.error("Aptos Wallet Error:", err);

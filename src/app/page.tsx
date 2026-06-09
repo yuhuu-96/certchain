@@ -193,8 +193,8 @@ export default function Home() {
   const [activeCampId, setActiveCampId] = useState<string | null>(null);
 
   // Explorer links
-  const getExplorerTxUrl = (hash: string) => `https://explorer.aptoslabs.com/txn/${hash}?network=testnet`;
-  const getExplorerAddressUrl = (addr: string) => `https://explorer.aptoslabs.com/account/${addr}?network=testnet`;
+  const getExplorerTxUrl = (hash: string) => `https://explorer.shelby.xyz/txn/${hash}?network=shelbynet`;
+  const getExplorerAddressUrl = (addr: string) => `https://explorer.shelby.xyz/account/${addr}?network=shelbynet`;
 
   // Fetch current user details
   const fetchUserData = useCallback(async (addr: string) => {
@@ -592,7 +592,7 @@ export default function Home() {
               <Btn
                 cls="btn-teal"
                 size="sm"
-                onClick={() => window.open(`https://explorer.aptoslabs.com/account/${account?.address}/resources?network=testnet`, "_blank")}
+                onClick={() => window.open(`https://explorer.shelby.xyz/account/${account?.address}/resources?network=shelbynet`, "_blank")}
               >
                 <Icon n="external-link" size={14} /> View on Explorer
               </Btn>

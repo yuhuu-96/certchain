@@ -264,7 +264,7 @@ function VerificationContent() {
             <div style={{ display: "flex", gap: "8px" }}>
               <button
                 className="btn btn-teal btn-full"
-                onClick={() => window.open(`https://explorer.aptoslabs.com/account/${urlAddress}/resources?network=testnet`, "_blank")}
+                onClick={() => window.open(`https://explorer.shelby.xyz/account/${urlAddress}/resources?network=shelbynet`, "_blank")}
               >
                 <Icon n="external-link" size={14} /> View Transaction on Explorer
               </button>
