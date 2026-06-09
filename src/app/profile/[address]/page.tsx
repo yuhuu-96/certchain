@@ -87,7 +87,7 @@ export default function PublicProfile() {
             Profile Not Found
           </h2>
           <p style={{ fontSize: "14px", color: "var(--color-text-secondary)", marginBottom: "16px" }}>
-            This wallet address has not registered a profile on CertChain Hub dApp.
+            This wallet address has not registered a profile on CertChain.
           </p>
           <code style={{ fontSize: "11px", display: "block", wordBreak: "break-all", background: "var(--color-background-secondary)", padding: "8px", borderRadius: "6px", color: "var(--color-text-secondary)" }}>
             {address}
@@ -257,7 +257,7 @@ export default function PublicProfile() {
           >
             <Icon n="certificate" size={17} style={{ color: "#fff" }} />
           </div>
-          <span style={{ fontWeight: 600, fontSize: "15px" }}>CertChain Hub dApp</span>
+          <span style={{ fontWeight: 600, fontSize: "15px" }}>CertChain</span>
         </div>
         <Badge color="teal" icon="shield">Public Viewer</Badge>
       </div>

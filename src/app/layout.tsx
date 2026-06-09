@@ -14,7 +14,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "CertChain Hub dApp",
+  title: "CertChain Hub",
   description: "Issue and verify non-transferable certificates (SBT) on Shelby Network with decentralized metadata stored on Shelby Protocol blobs.",
 };
 

@@ -539,7 +539,7 @@ export default function Home() {
                 />
               )}
               <p style={{ fontSize: "11px", color: "var(--color-text-secondary)", marginTop: "12px", textAlign: "center" }}>
-                This QR code references the CertChain Hub dApp public on-chain verification page.
+                This QR code references the CertChain public on-chain verification page.
               </p>
             </Card>
           </div>
@@ -633,7 +633,7 @@ export default function Home() {
               </div>
               <h2 style={{ fontSize: "20px", fontWeight: 600, marginBottom: "6px" }}>Connect Wallet</h2>
               <p style={{ fontSize: "14px", color: "var(--color-text-secondary)", lineHeight: 1.6 }}>
-                CertChain Hub dApp runs on Shelby Network.<br />
+                CertChain runs on Shelby Network.<br />
                 Connect your Shelby/Aptos wallet to continue.
               </p>
             </div>
@@ -1234,7 +1234,7 @@ export default function Home() {
           >
             <Icon n="certificate" size={17} style={{ color: "#fff" }} />
           </div>
-          <span style={{ fontWeight: 600, fontSize: "15px" }}>CertChain Hub dApp</span>
+          <span style={{ fontWeight: 600, fontSize: "15px" }}>CertChain</span>
           <Badge color="amber" icon="test-pipe">Shelby Testnet</Badge>
         </div>
 

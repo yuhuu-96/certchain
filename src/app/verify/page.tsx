@@ -114,7 +114,7 @@ function VerificationContent() {
           >
             <Icon n="certificate" size={17} style={{ color: "#fff" }} />
           </div>
-          <span style={{ fontWeight: 600, fontSize: "15px" }}>CertChain Hub dApp Verification</span>
+          <span style={{ fontWeight: 600, fontSize: "15px" }}>CertChain Verification</span>
         </div>
         <Badge color="green" icon="shield-check">Secure</Badge>
       </div>
