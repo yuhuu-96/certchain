@@ -1,4 +1,4 @@
-/* SUI Overflow Inspired Neobrutalist Developer Theme */
+/* SUI Overflow Inspired Premium Dark Obsidian Theme */
 :root {
   --font-sans: var(--font-outfit), 'Space Grotesk', 'Outfit', sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
@@ -6,32 +6,32 @@
   --font-cursive: var(--font-cursive), 'Great Vibes', cursive;
   --font-outfit: var(--font-outfit), 'Outfit', sans-serif;
   
-  /* Stark Dark Palette */
-  --color-background-primary: #050505;
-  --color-background-secondary: #0a0a0c;
-  --color-text-primary: #ffffff;
-  --color-text-secondary: #8e8e93;
-  --color-border-primary: #1c1c20;
-  --color-border-secondary: #121214;
-  --color-border-tertiary: #08080a;
+  /* Softer Dark Obsidian Palette */
+  --color-background-primary: #07080b; /* Very dark slate blue/black */
+  --color-background-secondary: #0c0e15; /* Soft dark slate */
+  --color-text-primary: #f1f5f9; /* Slate off-white (easier on eyes) */
+  --color-text-secondary: #94a3b8; /* Slate gray */
+  --color-border-primary: #1e293b; /* Softer slate border */
+  --color-border-secondary: #0f172a;
+  --color-border-tertiary: #0c0e14;
   
-  --color-primary: #00f0ff; /* Electric Cyan */
-  --color-primary-hover: #00cce0;
-  --color-primary-light: rgba(0, 240, 255, 0.06);
-  --color-primary-border: #00a2ff;
+  --color-primary: #818cf8; /* Soft Indigo Accent */
+  --color-primary-hover: #6366f1;
+  --color-primary-light: rgba(129, 140, 248, 0.08);
+  --color-primary-border: rgba(129, 140, 248, 0.2);
   
-  --color-teal: #00ff88; /* Neon Green */
-  --color-teal-hover: #00d672;
-  --color-teal-light: rgba(0, 255, 136, 0.06);
+  --color-teal: #2dd4bf; /* Soft Seafoam Teal */
+  --color-teal-hover: #14b8a6;
+  --color-teal-light: rgba(45, 212, 191, 0.08);
   
-  --color-amber: #ffaa00; /* Neon Gold */
-  --color-amber-light: rgba(255, 170, 0, 0.06);
+  --color-amber: #fbbf24; /* Soft Gold/Amber */
+  --color-amber-light: rgba(251, 191, 36, 0.08);
   
-  --color-coral: #ff5500; /* Neon Orange */
-  --color-coral-light: rgba(255, 85, 0, 0.06);
+  --color-coral: #fb7185; /* Soft Rose/Coral */
+  --color-coral-light: rgba(251, 113, 133, 0.08);
   
-  --color-red: #ff3b30; /* Electric Red */
-  --color-red-light: rgba(255, 59, 48, 0.06);
+  --color-red: #ef4444; /* Standard Red */
+  --color-red-light: rgba(239, 68, 68, 0.08);
 }
 
 /* Base resets */
@@ -45,9 +45,9 @@ body {
   font-family: var(--font-sans);
   background-color: var(--color-background-primary);
   background-image: 
-    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-  background-size: 24px 24px;
+    linear-gradient(rgba(129, 140, 248, 0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(129, 140, 248, 0.015) 1px, transparent 1px);
+  background-size: 28px 28px;
   background-position: center;
   color: var(--color-text-primary);
   min-height: 100vh;
@@ -107,8 +107,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @keyframes pulseGlow {
-  0%, 100% { box-shadow: 0 0 15px rgba(0, 240, 255, 0.1), inset 0 0 10px rgba(0, 240, 255, 0.05); }
-  50% { box-shadow: 0 0 25px rgba(0, 240, 255, 0.3), inset 0 0 15px rgba(0, 240, 255, 0.1); }
+  0%, 100% { box-shadow: 0 0 15px rgba(129, 140, 248, 0.1), inset 0 0 10px rgba(129, 140, 248, 0.05); }
+  50% { box-shadow: 0 0 25px rgba(129, 140, 248, 0.2), inset 0 0 15px rgba(129, 140, 248, 0.08); }
 }
 
 .anim-float {
@@ -136,15 +136,15 @@ input, textarea {
   padding: 11px 14px;
   border-radius: 4px;
   border: 1.5px solid var(--color-border-primary);
-  background: #08080a;
-  color: #ffffff;
+  background: var(--color-background-secondary);
+  color: var(--color-text-primary);
   outline: none;
   transition: border-color 0.15s, box-shadow 0.15s, background-color 0.15s;
 }
 
 input:focus, textarea:focus {
   border-color: var(--color-primary);
-  box-shadow: 0 0 10px rgba(0, 240, 255, 0.15);
+  box-shadow: 0 0 10px rgba(129, 140, 248, 0.15);
 }
 
 textarea {
@@ -200,7 +200,7 @@ textarea {
   background: var(--color-primary);
   color: #000000;
   border-color: var(--color-primary);
-  box-shadow: 0 0 20px rgba(0, 240, 255, 0.35);
+  box-shadow: 0 0 20px rgba(129, 140, 248, 0.25);
 }
 
 .btn-teal {
@@ -213,7 +213,7 @@ textarea {
   background: var(--color-teal);
   color: #000000;
   border-color: var(--color-teal);
-  box-shadow: 0 0 20px rgba(0, 255, 136, 0.35);
+  box-shadow: 0 0 20px rgba(45, 212, 191, 0.25);
 }
 
 .btn-ghost {
@@ -236,7 +236,7 @@ textarea {
 
 .btn-outline:hover:not(:disabled) {
   background: var(--color-primary-light);
-  box-shadow: 0 0 15px rgba(0, 240, 255, 0.15);
+  box-shadow: 0 0 15px rgba(129, 140, 248, 0.15);
 }
 
 .btn-danger {
@@ -246,7 +246,7 @@ textarea {
 }
 
 .btn-danger:hover:not(:disabled) {
-  box-shadow: 0 0 15px rgba(255, 59, 48, 0.35);
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.25);
 }
 
 .btn-full {
@@ -256,7 +256,7 @@ textarea {
 
 /* Cards */
 .card {
-  background: #08080a;
+  background: var(--color-background-secondary);
   border: 1.5px solid var(--color-border-primary);
   border-radius: 6px;
   padding: 1.25rem 1.4rem;
@@ -269,7 +269,7 @@ textarea {
 
 .card-hover:hover {
   border-color: var(--color-primary);
-  box-shadow: 0 0 15px rgba(0, 240, 255, 0.12);
+  box-shadow: 0 0 15px rgba(129, 140, 248, 0.1);
   transform: translateY(-2px);
 }
 
@@ -367,7 +367,7 @@ textarea {
 }
 
 .spinner-dark {
-  border-color: rgba(0, 240, 255, .1);
+  border-color: var(--color-primary-light);
   border-top-color: var(--color-primary);
 }
 
@@ -375,7 +375,7 @@ textarea {
 .nav-bar {
   display: flex;
   border-top: 1.5px solid var(--color-border-primary);
-  background: #050506;
+  background: var(--color-background-primary);
   position: sticky;
   bottom: 0;
   z-index: 10;
@@ -478,7 +478,7 @@ textarea {
 
 /* Dashboard statistics widget */
 .stat-card {
-  background: #08080a;
+  background: var(--color-background-secondary);
   border: 1.5px solid var(--color-border-primary);
   border-radius: 4px;
   padding: 16px 12px;
@@ -535,7 +535,7 @@ textarea {
   border-radius: 4px;
   padding: 34px 28px;
   position: relative;
-  box-shadow: 0 0 35px rgba(0, 240, 255, 0.12);
+  box-shadow: 0 0 35px rgba(129, 140, 248, 0.12);
   font-family: var(--font-outfit), sans-serif;
   color: #ffffff;
   text-align: center;
@@ -711,7 +711,7 @@ textarea {
   width: 52px;
   height: 52px;
   border-radius: 4px;
-  background: #08080a;
+  background: var(--color-background-secondary);
   border: 1.5px solid var(--color-border-primary);
   display: flex;
   align-items: center;
