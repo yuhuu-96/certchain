@@ -831,7 +831,7 @@ textarea {
 
 /* Layout shell wrapper */
 .app-container {
-  max-width: 640px;
+  max-width: 1200px;
   margin: 0 auto;
   min-height: 100vh;
   display: flex;
@@ -847,11 +847,29 @@ textarea {
   padding-bottom: 80px; /* nav bar offset */
 }
 
-@media (max-width: 640px) {
+@media (max-width: 1200px) {
   .app-container {
     width: 100%;
     border-left: none;
     border-right: none;
+  }
+}
+
+/* Hero Section Grid (Desktop: 2 columns, Mobile: 1 column) */
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 40px;
+  padding: 40px 0;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 32px;
+    padding: 20px 0;
   }
 }
 

@@ -629,18 +629,42 @@ export default function Home() {
     switch (view) {
       case "connect":
         return (
-          <div className="fade-in" style={{ padding: "0 20px 40px", maxWidth: "800px", margin: "0 auto" }}>
+          <div className="fade-in" style={{ padding: "0 20px 40px", width: "100%" }}>
             {/* Grid Layout for Hero Info and Animation */}
-            <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "32px", padding: "20px 0 32px" }}>
+            <div className="hero-grid">
               
-              {/* Graphic Animation Panel */}
-              <div style={{ display: "flex", justifyContent: "center", alignItems: "center", position: "relative", minHeight: "260px" }}>
+              {/* Text Info Panel (Left on Desktop, Top on Mobile) */}
+              <div style={{ textAlign: "left" }}>
+                <h1 style={{ fontSize: "36px", fontWeight: 800, lineHeight: 1.15, marginBottom: "16px", letterSpacing: "-1px" }}>
+                  Soulbound Certificates on <span style={{ color: "var(--color-primary)" }}>Shelby Network</span>
+                </h1>
+                <p style={{ fontSize: "15px", color: "var(--color-text-secondary)", lineHeight: 1.6, marginBottom: "28px" }}>
+                  CertChain Hub lets organizations issue tamper-proof, non-transferable achievement credentials. Metadata is stored securely in Shelby decentralized storage and registered on-chain via smart contracts.
+                </p>
+
+                {/* Primary Action Button */}
+                <Btn
+                  onClick={() => setShowConnectModal(true)}
+                  style={{
+                    padding: "13px 28px",
+                    fontSize: "13px",
+                    border: "2px solid var(--color-primary)",
+                    background: "var(--color-primary-light)",
+                    boxShadow: "0 0 15px rgba(0, 240, 255, 0.15)",
+                  }}
+                >
+                  <Icon n="wallet" size={16} /> Connect Wallet to Enter
+                </Btn>
+              </div>
+
+              {/* Graphic Animation Panel (Right on Desktop, Bottom on Mobile) */}
+              <div style={{ display: "flex", justifyContent: "center", alignItems: "center", position: "relative", minHeight: "280px" }}>
                 
                 {/* Orbital & Pulse Animation */}
                 <div className="anim-glow-pulse" style={{
                   position: "relative",
-                  width: "200px",
-                  height: "200px",
+                  width: "210px",
+                  height: "210px",
                   borderRadius: "50%",
                   border: "2px dashed rgba(0, 240, 255, 0.2)",
                   display: "flex",
@@ -651,8 +675,8 @@ export default function Home() {
                   {/* Outer rotating ring */}
                   <div style={{
                     position: "absolute",
-                    width: "240px",
-                    height: "240px",
+                    width: "250px",
+                    height: "250px",
                     borderRadius: "50%",
                     border: "1px dashed rgba(0, 255, 136, 0.15)",
                     animation: "spin 25s linear infinite"
@@ -660,8 +684,8 @@ export default function Home() {
 
                   {/* Internal Cert Badge */}
                   <div className="anim-float" style={{
-                    width: "100px",
-                    height: "100px",
+                    width: "105px",
+                    height: "105px",
                     borderRadius: "8px",
                     background: "rgba(10, 10, 12, 0.9)",
                     border: "2px solid var(--color-primary)",
@@ -673,7 +697,7 @@ export default function Home() {
                     position: "relative",
                     zIndex: 2,
                   }}>
-                    <Icon n="certificate" size={40} style={{ color: "var(--color-primary)" }} />
+                    <Icon n="certificate" size={44} style={{ color: "var(--color-primary)" }} />
                     <div style={{ fontSize: "10px", fontWeight: 700, marginTop: "6px", color: "var(--color-teal)", fontFamily: "var(--font-mono)" }}>
                       SBT CERT
                     </div>
@@ -683,7 +707,7 @@ export default function Home() {
                   <div className="anim-float-delay" style={{
                     position: "absolute",
                     top: "10px",
-                    right: "-10px",
+                    right: "-15px",
                     background: "rgba(10,10,12,0.9)",
                     border: "1.5px solid var(--color-teal)",
                     borderRadius: "4px",
@@ -703,7 +727,7 @@ export default function Home() {
                   <div className="anim-float" style={{
                     position: "absolute",
                     bottom: "20px",
-                    left: "-30px",
+                    left: "-35px",
                     background: "rgba(10,10,12,0.9)",
                     border: "1.5px solid var(--color-primary)",
                     borderRadius: "4px",
@@ -723,7 +747,7 @@ export default function Home() {
                   <div className="anim-float-delay" style={{
                     position: "absolute",
                     bottom: "10px",
-                    right: "-20px",
+                    right: "-25px",
                     background: "rgba(10,10,12,0.9)",
                     border: "1.5px solid var(--color-amber)",
                     borderRadius: "4px",
@@ -741,35 +765,10 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Text Info Panel */}
-              <div style={{ textAlign: "center" }}>
-                <h1 style={{ fontSize: "28px", fontWeight: 800, lineHeight: 1.2, marginBottom: "12px", letterSpacing: "-0.5px" }}>
-                  Soulbound Certificates on <span style={{ color: "var(--color-primary)" }}>Shelby Network</span>
-                </h1>
-                <p style={{ fontSize: "14px", color: "var(--color-text-secondary)", lineHeight: 1.6, maxWidth: "560px", margin: "0 auto 24px" }}>
-                  CertChain Hub lets organizations issue tamper-proof, non-transferable achievement credentials. Metadata is stored securely in Shelby decentralized storage and registered on-chain via smart contracts.
-                </p>
-
-                {/* Primary Action Button */}
-                <Btn
-                  onClick={() => setShowConnectModal(true)}
-                  style={{
-                    padding: "12px 28px",
-                    fontSize: "13px",
-                    border: "2px solid var(--color-primary)",
-                    background: "var(--color-primary-light)",
-                    boxShadow: "0 0 15px rgba(0, 240, 255, 0.15)",
-                    margin: "0 auto",
-                  }}
-                >
-                  <Icon n="wallet" size={16} /> Connect Wallet to Enter
-                </Btn>
-              </div>
-
             </div>
 
             {/* Feature Cards Grid */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "16px", marginTop: "16px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "16px", marginTop: "20px" }}>
               {[
                 { title: "Soulbound Identity", desc: "SBT certificates are bound directly to your wallet address and cannot be transferred, ensuring credential integrity.", icon: "id" },
                 { title: "Shelby Blob Storage", desc: "JSON metadata is hosted in Shelby's decentralized blob store, guaranteeing permanent, reliable data availability.", icon: "cloud" },
