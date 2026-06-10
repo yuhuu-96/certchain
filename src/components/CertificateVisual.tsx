@@ -42,17 +42,6 @@ export default function CertificateVisual({
       >
         {/* Background Watermark */}
         <div className="cert-watermark">SECURED</div>
-        
-        {/* Border Inner Detail */}
-        <div style={{
-          position: "absolute",
-          top: "8px",
-          left: "8px",
-          right: "8px",
-          bottom: "8px",
-          border: "1px dashed rgba(212, 175, 55, 0.4)",
-          pointerEvents: "none"
-        }} />
 
         {/* Certificate Content */}
         <div style={{ position: "relative", zIndex: 1 }}>
@@ -81,7 +70,7 @@ export default function CertificateVisual({
               <div className="cert-signature-img">{displayOrgName}</div>
               <div className="cert-signature-line" />
               <div className="cert-signature-title">Authorized Issuer</div>
-              <code style={{ fontSize: "9px", color: "var(--color-text-secondary)", display: "block", marginTop: "2px" }}>
+              <code style={{ fontSize: "9px", color: "var(--color-text-secondary)", display: "block", marginTop: "2px", fontFamily: "var(--font-mono)" }}>
                 {cert.issuer.slice(0, 10)}...
               </code>
             </div>
@@ -89,12 +78,12 @@ export default function CertificateVisual({
             {/* Cryptographic Seal Side */}
             <div className="cert-seal-box">
               <div className="cert-gold-seal">
-                <i className="ti ti-shield-check" style={{ fontSize: "24px", color: "#fff" }} />
+                <i className="ti ti-shield-check" style={{ fontSize: "24px", color: "#000" }} />
               </div>
-              <div style={{ fontSize: "11px", fontWeight: 700, color: "var(--color-teal)" }}>
+              <div style={{ fontSize: "11px", fontWeight: 700, color: "var(--color-teal)", fontFamily: "var(--font-mono)", letterSpacing: "0.5px" }}>
                 VERIFIED STATUS
               </div>
-              <code style={{ fontSize: "9px", color: "var(--color-text-secondary)" }}>
+              <code style={{ fontSize: "9px", color: "var(--color-text-secondary)", fontFamily: "var(--font-mono)" }}>
                 ID: {credentialId}
               </code>
             </div>
