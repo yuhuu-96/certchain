@@ -66,8 +66,8 @@ const Btn = ({
 );
 
 // Card Component
-const Card = ({ children, style: sx, onClick, hover }: { children: React.ReactNode; style?: React.CSSProperties; onClick?: () => void; hover?: boolean }) => (
-  <div className={`card${hover ? " card-hover" : ""}`} onClick={onClick} style={sx}>
+const Card = ({ children, style: sx, onClick, hover, cls }: { children: React.ReactNode; style?: React.CSSProperties; onClick?: () => void; hover?: boolean; cls?: string }) => (
+  <div className={`card${hover ? " card-hover" : ""}${cls ? ` ${cls}` : ""}`} onClick={onClick} style={sx}>
     {children}
   </div>
 );
@@ -163,6 +163,8 @@ export default function Home() {
   const [view, setView] = useState<
     "connect" | "create-profile" | "dashboard" | "create-org" | "org-dashboard" | "explore" | "edit-profile"
   >("connect");
+
+  const [showConnectModal, setShowConnectModal] = useState(false);
 
   // On-chain Data State
   const [profile, setProfile] = useState<OnChainProfile | null>(null);
@@ -627,77 +629,171 @@ export default function Home() {
     switch (view) {
       case "connect":
         return (
-          <div className="fade-in" style={{ padding: "32px 20px" }}>
-            <div style={{ textAlign: "center", marginBottom: "32px" }}>
-              <div
-                style={{
-                  width: "64px",
-                  height: "64px",
-                  borderRadius: "16px",
-                  background: "var(--color-primary-light)",
+          <div className="fade-in" style={{ padding: "0 20px 40px", maxWidth: "800px", margin: "0 auto" }}>
+            {/* Grid Layout for Hero Info and Animation */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "32px", padding: "20px 0 32px" }}>
+              
+              {/* Graphic Animation Panel */}
+              <div style={{ display: "flex", justifyContent: "center", alignItems: "center", position: "relative", minHeight: "260px" }}>
+                
+                {/* Orbital & Pulse Animation */}
+                <div className="anim-glow-pulse" style={{
+                  position: "relative",
+                  width: "200px",
+                  height: "200px",
+                  borderRadius: "50%",
+                  border: "2px dashed rgba(0, 240, 255, 0.2)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  margin: "0 auto 16px",
-                }}
-              >
-                <Icon n="link" size={30} style={{ color: "var(--color-primary)" }} />
-              </div>
-              <h2 style={{ fontSize: "20px", fontWeight: 600, marginBottom: "6px" }}>Connect Wallet</h2>
-              <p style={{ fontSize: "14px", color: "var(--color-text-secondary)", lineHeight: 1.6 }}>
-                CertChain runs on Shelby Network.<br />
-                Connect your Shelby/Aptos wallet to continue.
-              </p>
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: "10px", maxWidth: "340px", margin: "0 auto" }}>
-              {(wallets || []).map((w) => {
-                const isInstalled = w.readyState === "Installed";
-                return (
-                  <button
-                    key={w.name}
-                    onClick={() => connect(w.name)}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "12px",
-                      padding: "12px 16px",
-                      borderRadius: "10px",
-                      background: "var(--color-background-primary)",
-                      border: "1px solid var(--color-border-primary)",
-                      cursor: "pointer",
-                      transition: "all .15s",
-                      fontFamily: "inherit",
-                      opacity: isInstalled ? 1 : 0.6,
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: "36px",
-                        height: "36px",
-                        borderRadius: "8px",
-                        background: "var(--color-primary-light)",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      {w.icon ? (
-                        <img src={w.icon} alt={w.name} style={{ width: "22px", height: "22px" }} />
-                      ) : (
-                        <Icon n="wallet" size={18} style={{ color: "var(--color-primary)" }} />
-                      )}
+                  background: "rgba(0, 240, 255, 0.01)"
+                }}>
+                  {/* Outer rotating ring */}
+                  <div style={{
+                    position: "absolute",
+                    width: "240px",
+                    height: "240px",
+                    borderRadius: "50%",
+                    border: "1px dashed rgba(0, 255, 136, 0.15)",
+                    animation: "spin 25s linear infinite"
+                  }} />
+
+                  {/* Internal Cert Badge */}
+                  <div className="anim-float" style={{
+                    width: "100px",
+                    height: "100px",
+                    borderRadius: "8px",
+                    background: "rgba(10, 10, 12, 0.9)",
+                    border: "2px solid var(--color-primary)",
+                    boxShadow: "0 0 20px rgba(0, 240, 255, 0.2)",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    position: "relative",
+                    zIndex: 2,
+                  }}>
+                    <Icon n="certificate" size={40} style={{ color: "var(--color-primary)" }} />
+                    <div style={{ fontSize: "10px", fontWeight: 700, marginTop: "6px", color: "var(--color-teal)", fontFamily: "var(--font-mono)" }}>
+                      SBT CERT
                     </div>
-                    <span style={{ flex: 1, textAlign: "left", fontWeight: 600, fontSize: "14px", color: "var(--color-text-primary)" }}>
-                      {w.name} {!isInstalled && <span style={{ fontSize: "11px", fontWeight: 400 }}>(Not Installed)</span>}
-                    </span>
-                    <Icon n="chevron-right" size={16} style={{ color: "var(--color-text-secondary)" }} />
-                  </button>
-                );
-              })}
+                  </div>
+
+                  {/* Floating badge 1: Shelby */}
+                  <div className="anim-float-delay" style={{
+                    position: "absolute",
+                    top: "10px",
+                    right: "-10px",
+                    background: "rgba(10,10,12,0.9)",
+                    border: "1.5px solid var(--color-teal)",
+                    borderRadius: "4px",
+                    padding: "4px 8px",
+                    fontSize: "11px",
+                    fontFamily: "var(--font-mono)",
+                    color: "var(--color-teal)",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "4px",
+                    zIndex: 3,
+                  }}>
+                    <Icon n="cloud" size={12} /> Shelby Storage
+                  </div>
+
+                  {/* Floating badge 2: Aptos/Move */}
+                  <div className="anim-float" style={{
+                    position: "absolute",
+                    bottom: "20px",
+                    left: "-30px",
+                    background: "rgba(10,10,12,0.9)",
+                    border: "1.5px solid var(--color-primary)",
+                    borderRadius: "4px",
+                    padding: "4px 8px",
+                    fontSize: "11px",
+                    fontFamily: "var(--font-mono)",
+                    color: "var(--color-primary)",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "4px",
+                    zIndex: 3,
+                  }}>
+                    <Icon n="shield" size={12} /> Soulbound SBT
+                  </div>
+
+                  {/* Floating badge 3: Verified */}
+                  <div className="anim-float-delay" style={{
+                    position: "absolute",
+                    bottom: "10px",
+                    right: "-20px",
+                    background: "rgba(10,10,12,0.9)",
+                    border: "1.5px solid var(--color-amber)",
+                    borderRadius: "4px",
+                    padding: "4px 8px",
+                    fontSize: "11px",
+                    fontFamily: "var(--font-mono)",
+                    color: "var(--color-amber)",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "4px",
+                    zIndex: 3,
+                  }}>
+                    <Icon n="check" size={12} /> Verified
+                  </div>
+                </div>
+              </div>
+
+              {/* Text Info Panel */}
+              <div style={{ textAlign: "center" }}>
+                <h1 style={{ fontSize: "28px", fontWeight: 800, lineHeight: 1.2, marginBottom: "12px", letterSpacing: "-0.5px" }}>
+                  Soulbound Certificates on <span style={{ color: "var(--color-primary)" }}>Shelby Network</span>
+                </h1>
+                <p style={{ fontSize: "14px", color: "var(--color-text-secondary)", lineHeight: 1.6, maxWidth: "560px", margin: "0 auto 24px" }}>
+                  CertChain Hub lets organizations issue tamper-proof, non-transferable achievement credentials. Metadata is stored securely in Shelby decentralized storage and registered on-chain via smart contracts.
+                </p>
+
+                {/* Primary Action Button */}
+                <Btn
+                  onClick={() => setShowConnectModal(true)}
+                  style={{
+                    padding: "12px 28px",
+                    fontSize: "13px",
+                    border: "2px solid var(--color-primary)",
+                    background: "var(--color-primary-light)",
+                    boxShadow: "0 0 15px rgba(0, 240, 255, 0.15)",
+                    margin: "0 auto",
+                  }}
+                >
+                  <Icon n="wallet" size={16} /> Connect Wallet to Enter
+                </Btn>
+              </div>
+
             </div>
-            <p style={{ fontSize: "11px", color: "var(--color-text-secondary)", textAlign: "center", marginTop: "24px" }}>
-              @shelby-protocol/react · @aptos-labs/wallet-adapter-react · Shelbynet
-            </p>
+
+            {/* Feature Cards Grid */}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "16px", marginTop: "16px" }}>
+              {[
+                { title: "Soulbound Identity", desc: "SBT certificates are bound directly to your wallet address and cannot be transferred, ensuring credential integrity.", icon: "id" },
+                { title: "Shelby Blob Storage", desc: "JSON metadata is hosted in Shelby's decentralized blob store, guaranteeing permanent, reliable data availability.", icon: "cloud" },
+                { title: "Instant Verification", desc: "Anyone can instantly scan a certificate's secure QR code to verify its authenticity directly on Shelbynet.", icon: "shield-check" }
+              ].map((f) => (
+                <Card key={f.title} style={{ padding: "18px" }}>
+                  <div style={{
+                    width: "36px",
+                    height: "36px",
+                    borderRadius: "6px",
+                    background: "var(--color-primary-light)",
+                    border: "1.5px solid var(--color-primary)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginBottom: "12px"
+                  }}>
+                    <Icon n={f.icon} size={18} style={{ color: "var(--color-primary)" }} />
+                  </div>
+                  <h3 style={{ fontSize: "14px", fontWeight: 700, marginBottom: "6px" }}>{f.title}</h3>
+                  <p style={{ fontSize: "12px", color: "var(--color-text-secondary)", lineHeight: 1.5 }}>{f.desc}</p>
+                </Card>
+              ))}
+            </div>
           </div>
         );
 
@@ -1367,7 +1463,7 @@ export default function Home() {
           <Badge color="amber" icon="test-pipe">Shelbynet</Badge>
         </div>
 
-        {connected && account && (
+        {connected && account ? (
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
             <div
               style={{ display: "flex", alignItems: "center", gap: "5px", fontSize: "12px", color: "var(--color-text-secondary)", cursor: "pointer" }}
@@ -1395,6 +1491,30 @@ export default function Home() {
               <Icon n="logout" size={16} />
             </button>
           </div>
+        ) : (
+          <button
+            onClick={() => setShowConnectModal(true)}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              padding: "6px 12px",
+              borderRadius: "4px",
+              background: "var(--color-primary-light)",
+              border: "1.5px solid var(--color-primary)",
+              color: "var(--color-primary)",
+              cursor: "pointer",
+              fontSize: "12px",
+              fontWeight: 700,
+              textTransform: "uppercase",
+              fontFamily: "inherit",
+              letterSpacing: "0.5px",
+              transition: "all 0.15s ease",
+            }}
+            className="btn-connect-header"
+          >
+            <Icon n="wallet" size={13} /> Connect Wallet
+          </button>
         )}
       </div>
 
@@ -1423,6 +1543,121 @@ export default function Home() {
               {label}
             </button>
           ))}
+        </div>
+      )}
+
+      {/* Wallet Connect Popover Modal */}
+      {showConnectModal && (
+        <div style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: "rgba(0, 0, 0, 0.85)",
+          backdropFilter: "blur(4px)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          zIndex: 1000,
+          padding: "20px",
+        }}>
+          <Card style={{
+            maxWidth: "380px",
+            width: "100%",
+            border: "2px solid var(--color-primary)",
+            boxShadow: "0 0 30px rgba(0, 240, 255, 0.3)",
+            position: "relative",
+            background: "var(--color-background-secondary)",
+          }} cls="fade-in">
+            {/* Close button */}
+            <button
+              onClick={() => setShowConnectModal(false)}
+              style={{
+                position: "absolute",
+                top: "14px",
+                right: "14px",
+                background: "transparent",
+                border: "none",
+                color: "var(--color-text-secondary)",
+                cursor: "pointer",
+                padding: "4px",
+              }}
+            >
+              <Icon n="x" size={18} />
+            </button>
+
+            <div style={{ textAlign: "center", marginBottom: "20px", marginTop: "10px" }}>
+              <div
+                style={{
+                  width: "50px",
+                  height: "50px",
+                  borderRadius: "10px",
+                  background: "var(--color-primary-light)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  margin: "0 auto 12px",
+                }}
+              >
+                <Icon n="wallet" size={24} style={{ color: "var(--color-primary)" }} />
+              </div>
+              <h2 style={{ fontSize: "16px", fontWeight: 700, marginBottom: "4px" }}>Connect your Wallet</h2>
+              <p style={{ fontSize: "12px", color: "var(--color-text-secondary)", lineHeight: 1.5 }}>
+                Select an Aptos / Shelby network compatible wallet to connect to CertChain Hub.
+              </p>
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+              {(wallets || []).map((w) => {
+                const isInstalled = w.readyState === "Installed";
+                return (
+                  <button
+                    key={w.name}
+                    onClick={() => {
+                      connect(w.name);
+                      setShowConnectModal(false);
+                    }}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "12px",
+                      padding: "10px 14px",
+                      borderRadius: "6px",
+                      background: "rgba(255,255,255,0.02)",
+                      border: "1px solid var(--color-border-primary)",
+                      cursor: "pointer",
+                      transition: "all .15s",
+                      fontFamily: "inherit",
+                      opacity: isInstalled ? 1 : 0.6,
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: "32px",
+                        height: "32px",
+                        borderRadius: "6px",
+                        background: "var(--color-primary-light)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      {w.icon ? (
+                        <img src={w.icon} alt={w.name} style={{ width: "20px", height: "20px" }} />
+                      ) : (
+                        <Icon n="wallet" size={16} style={{ color: "var(--color-primary)" }} />
+                      )}
+                    </div>
+                    <span style={{ flex: 1, textAlign: "left", fontWeight: 600, fontSize: "13px", color: "var(--color-text-primary)" }}>
+                      {w.name} {!isInstalled && <span style={{ fontSize: "10px", fontWeight: 400 }}>(Not Installed)</span>}
+                    </span>
+                    <Icon n="chevron-right" size={14} style={{ color: "var(--color-text-secondary)" }} />
+                  </button>
+                );
+              })}
+            </div>
+          </Card>
         </div>
       )}
     </div>
