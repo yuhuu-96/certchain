@@ -5,6 +5,7 @@ import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { useUploadBlobs } from "@shelby-protocol/react";
 import { useToast } from "@/components/Toast";
 import { ProfileSkeleton, ListSkeleton } from "@/components/LoadingSkeleton";
+import CertificateVisual from "@/components/CertificateVisual";
 import {
   aptos,
   MODULE_ADDRESS,
@@ -12,6 +13,7 @@ import {
   getOrganization,
   getCampaigns,
   getCertificates,
+  fetchBlobMetadata,
   OnChainProfile,
   OnChainOrganization,
   OnChainCampaign,
@@ -167,6 +169,26 @@ export default function Home() {
   const [campaigns, setCampaigns] = useState<OnChainCampaign[]>([]);
   const [certificates, setCertificates] = useState<OnChainCertificate[]>([]);
   const [selectedCert, setSelectedCert] = useState<OnChainCertificate | null>(null);
+  const [selectedCertMetadata, setSelectedCertMetadata] = useState<any>(null);
+  const [loadingCertMetadata, setLoadingCertMetadata] = useState(false);
+
+  useEffect(() => {
+    if (selectedCert) {
+      setLoadingCertMetadata(true);
+      fetchBlobMetadata(selectedCert.blob_url)
+        .then((meta) => {
+          setSelectedCertMetadata(meta);
+        })
+        .catch((e) => {
+          console.error("Failed to fetch cert metadata:", e);
+        })
+        .finally(() => {
+          setLoadingCertMetadata(false);
+        });
+    } else {
+      setSelectedCertMetadata(null);
+    }
+  }, [selectedCert]);
 
   // Loaders
   const [loadingProfile, setLoadingProfile] = useState(false);
@@ -497,34 +519,23 @@ export default function Home() {
           >
             <Icon n="arrow-left" size={16} /> Back to portfolio
           </button>
-          <div className="cert-visual" style={{ marginBottom: "16px" }}>
-            <div
-              style={{
-                width: "56px",
-                height: "56px",
-                borderRadius: "14px",
-                background: "var(--color-primary)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                margin: "0 auto 12px",
-                position: "relative",
-                zIndex: 1,
-              }}
-            >
-              <Icon n="certificate" size={28} style={{ color: "#fff" }} />
+          {loadingCertMetadata ? (
+            <div className="certificate-container" style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "260px" }}>
+              <div style={{ textAlign: "center" }}>
+                <span className="spinner spinner-dark" style={{ width: "26px", height: "26px", borderWidth: "2.5px", margin: "0 auto 12px" }} />
+                <p style={{ fontSize: "13px", color: "var(--color-text-secondary)" }}>
+                  Retrieving cryptographically secured metadata...
+                </p>
+              </div>
             </div>
-            <div style={{ fontWeight: 600, fontSize: "18px", color: "var(--color-primary)", marginBottom: "4px", position: "relative", zIndex: 1 }}>
-              Certificate of Completion
-            </div>
-            <div style={{ fontSize: "13px", color: "var(--color-teal)", marginBottom: "10px", position: "relative", zIndex: 1 }}>
-              <Icon n="building" size={13} /> {organization?.name || "Verified Organization"}
-            </div>
-            <div style={{ display: "flex", justifyContent: "center", gap: "8px", position: "relative", zIndex: 1 }}>
-              <Badge color="teal" icon="shield-check">Verified On-chain</Badge>
-              <Badge color="purple" icon="link">SBT Non-transferable</Badge>
-            </div>
-          </div>
+          ) : (
+            <CertificateVisual
+              cert={selectedCert}
+              metadata={selectedCertMetadata}
+              recipientName={profile?.name}
+              recipientAddress={account?.address || ""}
+            />
+          )}
 
           <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "12px", marginBottom: "16px" }}>
             <Card style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "20px" }}>

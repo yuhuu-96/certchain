@@ -2,6 +2,9 @@
 :root {
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --font-serif: var(--font-serif), 'Playfair Display', Georgia, serif;
+  --font-cursive: var(--font-cursive), 'Great Vibes', cursive;
+  --font-outfit: var(--font-outfit), 'Outfit', sans-serif;
   
   /* Light Mode Colors */
   --color-background-primary: #ffffff;
@@ -616,5 +619,208 @@ textarea {
   .app-container {
     width: 100%;
     box-shadow: none;
+  }
+}
+
+/* Premium Certificate Styles */
+.certificate-container {
+  background: radial-gradient(circle at center, #ffffff 0%, #fcfdfd 100%);
+  border: 12px double #d4af37; /* Ornate double border */
+  border-radius: 8px;
+  padding: 30px 24px;
+  position: relative;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  font-family: var(--font-outfit), sans-serif;
+  color: #1e293b;
+  text-align: center;
+  overflow: hidden;
+  margin-bottom: 8px;
+  border-image: linear-gradient(135deg, #d4af37 0%, #f3e5ab 50%, #aa7c11 100%) 12;
+}
+
+.dark .certificate-container {
+  background: radial-gradient(circle at center, #1e1b4b 0%, #09090b 100%);
+  border-image: linear-gradient(135deg, #f59e0b 0%, #fef3c7 50%, #b45309 100%) 12;
+  color: #f1f5f9;
+}
+
+.cert-watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-15deg);
+  font-size: 72px;
+  font-weight: 900;
+  color: rgba(212, 175, 55, 0.05);
+  pointer-events: none;
+  white-space: nowrap;
+  letter-spacing: 10px;
+  text-transform: uppercase;
+}
+
+.cert-header {
+  font-family: var(--font-serif), serif;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #b45309; /* Gold/amber tint */
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.dark .cert-header {
+  color: #fbbf24;
+}
+
+.cert-subheader {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #64748b;
+  margin-bottom: 20px;
+}
+
+.dark .cert-subheader {
+  color: #94a3b8;
+}
+
+.cert-recipient-label {
+  font-size: 12px;
+  font-style: italic;
+  color: #64748b;
+  margin-bottom: 8px;
+}
+
+.dark .cert-recipient-label {
+  color: #94a3b8;
+}
+
+.cert-recipient-name {
+  font-family: var(--font-serif), serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #1e1b4b;
+  border-bottom: 1.5px solid #d4af37;
+  display: inline-block;
+  padding: 0 30px 4px;
+  margin-bottom: 16px;
+}
+
+.dark .cert-recipient-name {
+  color: #ffffff;
+}
+
+.cert-course-label {
+  font-size: 12px;
+  color: #64748b;
+  margin-bottom: 8px;
+}
+
+.dark .cert-course-label {
+  color: #94a3b8;
+}
+
+.cert-course-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #0f6e56;
+  margin-bottom: 24px;
+  line-height: 1.4;
+}
+
+.dark .cert-course-name {
+  color: #14b8a6;
+}
+
+.cert-footer-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: center;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px dashed rgba(212, 175, 55, 0.3);
+}
+
+.cert-seal-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.cert-gold-seal {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #d4af37 0%, #aa7c11 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(170, 124, 17, 0.3);
+  margin-bottom: 6px;
+  position: relative;
+}
+
+.cert-gold-seal::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border: 1px dashed #ffffff;
+  border-radius: 50%;
+}
+
+.cert-signature-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cert-signature-img {
+  font-family: var(--font-cursive), cursive;
+  font-size: 22px;
+  color: #4f46e5;
+  height: 30px;
+  line-height: 30px;
+  margin-bottom: 2px;
+}
+
+.dark .cert-signature-img {
+  color: #818cf8;
+}
+
+.cert-signature-line {
+  width: 120px;
+  height: 1px;
+  background: #94a3b8;
+  margin-bottom: 4px;
+}
+
+.cert-signature-title {
+  font-size: 10px;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+/* Print Styles */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .print-cert-only, .print-cert-only * {
+    visibility: visible;
+  }
+  .print-cert-only {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    border: none !important;
+    box-shadow: none !important;
+    background: white !important;
+    color: black !important;
   }
 }

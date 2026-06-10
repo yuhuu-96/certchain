@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { useParams } from "next/navigation";
-import { getProfile, getCertificates, OnChainProfile, OnChainCertificate } from "@/utils/aptos";
+import { getProfile, getCertificates, fetchBlobMetadata, OnChainProfile, OnChainCertificate } from "@/utils/aptos";
 import { ProfileSkeleton, ListSkeleton } from "@/components/LoadingSkeleton";
+import CertificateVisual from "@/components/CertificateVisual";
 
 const Icon = ({ n, size = 18, style: sx }: { n: string; size?: number; style?: React.CSSProperties }) => (
   <i className={`ti ti-${n}`} style={{ fontSize: `${size}px`, ...sx }} aria-hidden="true" />
@@ -43,8 +44,28 @@ export default function PublicProfile() {
   const [profile, setProfile] = useState<OnChainProfile | null>(null);
   const [certs, setCerts] = useState<OnChainCertificate[]>([]);
   const [selectedCert, setSelectedCert] = useState<OnChainCertificate | null>(null);
+  const [selectedCertMetadata, setSelectedCertMetadata] = useState<any>(null);
+  const [loadingCertMetadata, setLoadingCertMetadata] = useState(false);
   const [loading, setLoading] = useState(true);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (selectedCert) {
+      setLoadingCertMetadata(true);
+      fetchBlobMetadata(selectedCert.blob_url)
+        .then((meta) => {
+          setSelectedCertMetadata(meta);
+        })
+        .catch((e) => {
+          console.error("Failed to fetch cert metadata:", e);
+        })
+        .finally(() => {
+          setLoadingCertMetadata(false);
+        });
+    } else {
+      setSelectedCertMetadata(null);
+    }
+  }, [selectedCert]);
 
   const loadProfileData = useCallback(async () => {
     if (!address) return;
@@ -122,34 +143,23 @@ export default function PublicProfile() {
         >
           <Icon n="arrow-left" size={16} /> Back to list
         </button>
-        <div className="cert-visual" style={{ marginBottom: "16px" }}>
-          <div
-            style={{
-              width: "56px",
-              height: "56px",
-              borderRadius: "14px",
-              background: "var(--color-primary)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              margin: "0 auto 12px",
-              position: "relative",
-              zIndex: 1,
-            }}
-          >
-            <Icon n="certificate" size={28} style={{ color: "#fff" }} />
+        {loadingCertMetadata ? (
+          <div className="certificate-container" style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "260px" }}>
+            <div style={{ textAlign: "center" }}>
+              <span className="spinner spinner-dark" style={{ width: "26px", height: "26px", borderWidth: "2.5px", margin: "0 auto 12px" }} />
+              <p style={{ fontSize: "13px", color: "var(--color-text-secondary)" }}>
+                Retrieving cryptographically secured metadata...
+              </p>
+            </div>
           </div>
-          <div style={{ fontWeight: 600, fontSize: "18px", color: "var(--color-primary)", marginBottom: "4px", position: "relative", zIndex: 1 }}>
-            Verified Certificate
-          </div>
-          <div style={{ fontSize: "13px", color: "var(--color-teal)", marginBottom: "10px", position: "relative", zIndex: 1 }}>
-            <Icon n="building" size={13} /> {cert.issuer.slice(0, 8) + "..." + cert.issuer.slice(-4)}
-          </div>
-          <div style={{ display: "flex", justifyContent: "center", gap: "8px", position: "relative", zIndex: 1 }}>
-            <Badge color="teal" icon="shield-check">Verified On-chain</Badge>
-            <Badge color="purple" icon="link">SBT</Badge>
-          </div>
-        </div>
+        ) : (
+          <CertificateVisual
+            cert={cert}
+            metadata={selectedCertMetadata}
+            recipientName={profile?.name}
+            recipientAddress={address}
+          />
+        )}
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "12px", marginBottom: "16px" }}>
           <Card style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "20px" }}>

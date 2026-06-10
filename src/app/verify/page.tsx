@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { getCertificates, fetchBlobMetadata, getProfile, OnChainCertificate, OnChainProfile } from "@/utils/aptos";
 import { ProfileSkeleton } from "@/components/LoadingSkeleton";
+import CertificateVisual from "@/components/CertificateVisual";
 
 const Icon = ({ n, size = 18, style: sx }: { n: string; size?: number; style?: React.CSSProperties }) => (
   <i className={`ti ti-${n}`} style={{ fontSize: `${size}px`, ...sx }} aria-hidden="true" />
@@ -201,6 +202,15 @@ function VerificationContent() {
                 Record found on Shelby Blockchain & Shelby Storage
               </p>
             </Card>
+
+            <div style={{ marginBottom: "20px" }}>
+              <CertificateVisual
+                cert={cert}
+                metadata={metadata}
+                recipientName={recipient?.name}
+                recipientAddress={urlAddress}
+              />
+            </div>
 
             <Card style={{ marginBottom: "16px" }}>
               <h3 className="section-title">Certificate Details</h3>
