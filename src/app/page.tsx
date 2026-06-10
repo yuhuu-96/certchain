@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
+import { AccountAddress } from "@aptos-labs/ts-sdk";
 import { useUploadBlobs } from "@shelby-protocol/react";
 import { useToast } from "@/components/Toast";
 import { ProfileSkeleton, ListSkeleton } from "@/components/LoadingSkeleton";
@@ -443,7 +444,7 @@ export default function Home() {
       // Upload via Shelby SDK react mutation
       await uploadBlobs.mutateAsync({
         signer: {
-          account: account.accountAddress,
+          account: AccountAddress.fromString(account!.address),
           signAndSubmitTransaction: signAndSubmitTransaction as any,
         },
         blobs,
@@ -1059,15 +1060,17 @@ export default function Home() {
 
         return (
           <div className="fade-in" style={{ padding: "0 20px 20px" }}>
-            <Card style={{ display: "flex", gap: "12px", alignItems: "center", marginBottom: "16px" }}>
+            {/* Org Profile Card */}
+            <Card style={{ display: "flex", gap: "12px", alignItems: "center", marginBottom: "12px" }}>
               <Av name={organization.name} size={48} color="teal" />
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontWeight: 600, fontSize: "15px", marginBottom: "2px" }}>{organization.name}</div>
-                <div style={{ fontSize: "13px", color: "var(--color-text-secondary)", marginBottom: "6px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                <div style={{ fontWeight: 700, fontSize: "15px", marginBottom: "2px" }}>{organization.name}</div>
+                <div style={{ fontSize: "12px", color: "var(--color-text-secondary)", marginBottom: "6px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                   {organization.desc || "No description registered"}
                 </div>
-                <div style={{ display: "flex", gap: "6px" }}>
+                <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
                   <Badge color="teal" icon="target">{campaigns.length} Campaign</Badge>
+                  <Badge color="teal" icon="shield-check">On-chain Verified</Badge>
                   {organization.website && (
                     <Badge color="gray" icon="world">
                       {organization.website.replace("https://", "").replace("http://", "").slice(0, 18)}
@@ -1076,6 +1079,121 @@ export default function Home() {
                 </div>
               </div>
             </Card>
+
+            {/* ─── ON-CHAIN PROOF PANEL ─── */}
+            <div style={{ marginBottom: "16px" }}>
+              <div className="section-title">On-Chain Registration Proof</div>
+              <Card style={{ border: "1.5px solid var(--color-teal)", background: "rgba(0,255,136,0.03)" }}>
+                {/* Status Header */}
+                <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "14px", paddingBottom: "12px", borderBottom: "1px solid var(--color-border-primary)" }}>
+                  <div style={{
+                    width: "36px", height: "36px", borderRadius: "4px",
+                    background: "rgba(0,255,136,0.1)", border: "1.5px solid var(--color-teal)",
+                    display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0
+                  }}>
+                    <Icon n="check" size={20} style={{ color: "var(--color-teal)" }} />
+                  </div>
+                  <div>
+                    <div style={{ fontWeight: 700, fontSize: "13px", color: "var(--color-teal)" }}>REGISTERED ON SHELBY NETWORK</div>
+                    <div style={{ fontSize: "11px", color: "var(--color-text-secondary)", fontFamily: "var(--font-mono)" }}>
+                      Resource stored at contract address
+                    </div>
+                  </div>
+                </div>
+
+                {/* Proof Details */}
+                {[
+                  {
+                    label: "Contract (Module) Address",
+                    value: MODULE_ADDRESS,
+                    icon: "code",
+                    mono: true,
+                    link: `https://explorer.shelby.xyz/account/${MODULE_ADDRESS}/modules?network=shelbynet`,
+                  },
+                  {
+                    label: "Your Wallet (Owner Address)",
+                    value: account?.address || "",
+                    icon: "wallet",
+                    mono: true,
+                    link: `https://explorer.shelby.xyz/account/${account?.address}/resources?network=shelbynet`,
+                  },
+                  {
+                    label: "On-chain Resource Type",
+                    value: `${MODULE_ADDRESS}::certchain::Organization`,
+                    icon: "database",
+                    mono: true,
+                    link: null,
+                  },
+                  {
+                    label: "Network",
+                    value: "Shelby Network (Shelbynet)",
+                    icon: "topology-star",
+                    mono: false,
+                    link: "https://explorer.shelby.xyz/?network=shelbynet",
+                  },
+                ].map(({ label, value, icon, mono, link }) => (
+                  <div key={label} style={{ display: "flex", flexDirection: "column", gap: "3px", marginBottom: "12px" }}>
+                    <div style={{ fontSize: "10px", fontWeight: 700, color: "var(--color-text-secondary)", textTransform: "uppercase", letterSpacing: "0.5px", display: "flex", alignItems: "center", gap: "5px", fontFamily: "var(--font-mono)" }}>
+                      <Icon n={icon} size={11} /> {label}
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <code style={{
+                        fontSize: mono ? "10px" : "12px",
+                        fontFamily: mono ? "var(--font-mono)" : "inherit",
+                        color: "var(--color-text-primary)",
+                        background: "#08080a",
+                        border: "1px solid var(--color-border-primary)",
+                        borderRadius: "3px",
+                        padding: "5px 8px",
+                        flex: 1,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                        display: "block",
+                      }}>
+                        {value}
+                      </code>
+                      {link && (
+                        <button
+                          onClick={() => window.open(link, "_blank")}
+                          style={{ background: "transparent", border: "1px solid var(--color-border-primary)", borderRadius: "3px", padding: "5px 8px", cursor: "pointer", color: "var(--color-primary)", flexShrink: 0, display: "flex", alignItems: "center", gap: "4px", fontSize: "11px", fontFamily: "var(--font-mono)" }}
+                        >
+                          <Icon n="external-link" size={12} /> View
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))}
+
+                {/* Shelby Storage Notice */}
+                <div style={{ borderTop: "1px solid var(--color-border-primary)", paddingTop: "12px", marginTop: "4px" }}>
+                  <div style={{ fontSize: "10px", fontWeight: 700, color: "var(--color-text-secondary)", textTransform: "uppercase", letterSpacing: "0.5px", fontFamily: "var(--font-mono)", marginBottom: "6px", display: "flex", alignItems: "center", gap: "5px" }}>
+                    <Icon n="cloud" size={11} /> Shelby Decentralized Storage
+                  </div>
+                  <div style={{ fontSize: "11px", color: "var(--color-text-secondary)", lineHeight: 1.6, fontFamily: "var(--font-mono)" }}>
+                    Organization metadata is stored on-chain inside the <code style={{ color: "var(--color-primary)" }}>Organization</code> resource under your wallet address. Shelby blob storage is used when you <strong style={{ color: "var(--color-teal)" }}>issue certificates</strong> — each certificate's JSON metadata is uploaded to Shelby Storage and the blob URL is committed on-chain.
+                  </div>
+                </div>
+
+                {/* CTA Buttons */}
+                <div style={{ display: "flex", gap: "8px", marginTop: "14px" }}>
+                  <button
+                    className="btn btn-outline"
+                    style={{ flex: 1 }}
+                    onClick={() => window.open(`https://explorer.shelby.xyz/account/${account?.address}/resources?network=shelbynet`, "_blank")}
+                  >
+                    <Icon n="external-link" size={14} /> View Account on Explorer
+                  </button>
+                  <button
+                    className="btn btn-ghost"
+                    style={{ flex: 1 }}
+                    onClick={() => window.open(`https://api.shelbynet.shelby.xyz/v1/accounts/${account?.address}/resource/${MODULE_ADDRESS}::certchain::Organization`, "_blank")}
+                  >
+                    <Icon n="api" size={14} /> Raw API Response
+                  </button>
+                </div>
+              </Card>
+            </div>
 
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
               <div className="section-title" style={{ margin: 0 }}>Campaign List</div>
