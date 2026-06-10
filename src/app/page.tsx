@@ -443,7 +443,7 @@ export default function Home() {
       // Upload via Shelby SDK react mutation
       await uploadBlobs.mutateAsync({
         signer: {
-          account: account as any,
+          account: account.accountAddress,
           signAndSubmitTransaction: signAndSubmitTransaction as any,
         },
         blobs,
